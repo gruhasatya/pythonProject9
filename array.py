@@ -69,39 +69,6 @@
 
 
 
-# XOR subsequences
-#
-# Problem Description
-#
-# You are given an array A, you have to create an array which subsequence of A
-#
-# An array B is called valid if it satisfies both the conditions
-#
-# 1. B[i] <B[i+1] where 1 <i<|B).
-#
-# 2. bit count(B[1] ^ .......... AB[i-1] B[i])bit_count(B[i+1]) where 1 <i<|B).
-#
-# Let X be the Bitwise XOR of all the elements in valid array B.
-#
-# You need to find the number of different values of X that can be formed.
-#
-# Note: bit_count(t) is the number of set bits present in the binary representation of t
-
-# input 1:
-# A = [1,3,2]
-# output 1:
-# 4
-
-def sol(arr):
-    n = len(arr)
-    result = 0
-    for i in range(n):
-        result = result ^ arr[i]
-    return result
-
-
-arr = [1, 3,2]
-print(sol(arr)
 
 
 

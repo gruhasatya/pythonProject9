@@ -3634,3 +3634,1348 @@ def first_repat(arr, n):
     if seen[num] > 1:      # and if it is present then it checks if the value of that key is greater than 1 or not
       return num + 1
   return -1
+
+
+#  sring -> have reverse function ->
+# or for loop -> for char in string
+
+def rotate(s, s1):
+  if len(s) != len(s1)
+    return False
+  for i in range(len(s1)):
+    if s[i:] + s[:i] == s1: # it would work like this -> s1 = "abcde" -> s1[1:] = "bcde" -> s1[:1] = "a" -> s1[1:] + s1[:1] = "bcdea"
+      return True
+  return False
+
+def rotate(s, s1):
+    if len(s) != len(s1)
+        return False
+    result = s + s
+    if s1 in result:
+        return True
+    return False
+
+def rotate(s, s1):
+    if len(s) != len(s1)
+        return False
+    return s1 in s + s
+
+
+
+
+
+
+def palindrome(s):   # abba
+  low = 0
+  high = len(s) - 1
+  while low < high:
+    if s[low] != s[high]:  # a != a => false -> low = 1, high = 2 => b != b => false
+      return False         # -> low = 2, high = 1 => low > high => false
+    low += 1
+    high -= 1
+  return True
+
+def palindrome(s):
+  return s == s[::-1]
+
+
+
+
+def subSequence(s1, s2):
+  j = 0
+  for char in s1:
+    if char == s2[j]:
+      j += 1
+      if j == len(s2):
+        return True
+  return False
+s1 = "abcde"
+s2 = "ace"
+print(subSequence(s1, s2))
+# output => True
+
+
+
+
+def subSequence(s1, s2, m, n):                   # iterating from the end of the string m = len(s1) and n = len(s2)
+  if n == 0:                                     # if n == 0 then it means that we have reached the end of the string s2 and we have found all the characters of s2 in s1
+    return True
+  if m == 0:                                     # if n is not 0 and m is 0 then m is not the subsequenece of n return false else travel to the next if statement
+    return False
+  if s1[m - 1] == s2[n - 1]:
+    return subSequence(s1, s2, m - 1, n - 1)
+  return subSequence(s1, s2, m - 1, n)
+
+
+
+
+
+
+
+
+
+
+def anagram(s1, s2):
+  if len(s1) != len(s2):
+    return False
+  seen = {}
+  for char in s1:
+    if char in seen:
+      seen[char] += 1
+    else:
+      seen[char] = 1
+  for char in s2:
+    if char in seen:
+      seen[char] -= 1
+      if seen[char] == 0:
+        del seen[char]         # if you return True here then it will return True for "abc" and "ab" also so you have to check if the length of the dictionary is 0 or not
+    else:                      # else should be here because if the char is not in seen then it is not an anagram
+      return False        #note----- if you put else under 2 if statment it will check for the char == 1 then it will go to else and return False which is wrong because it is not an anagram
+  return len(seen) == 0
+
+
+
+
+
+def anagram(s1, s2):
+  if len(s1) != len(s2):
+    return False
+  s1 = sorted(s1)
+  s2 = sorted(s2)
+  return s1 == s2
+
+def anagram(s1, s2):
+  if len(s1) != len(s2):
+    return False
+  count = [0] * 256
+  for i in range(len(s1)):
+    count[ord(s1[i])] += 1
+    count[ord(s2[i])] -= 1
+  for x in count:
+    if x != 0:
+      return False
+  return True
+
+s1 = "abcde"
+s2 = "edcba"
+print(anagram(s1, s2))
+
+
+
+
+
+
+
+
+def leftmost(str):
+  for i in range(len(str)):
+    for j in range(i + 1, len(str)):
+      if str[i] == str[j]:
+        return str[i]
+  return -1
+
+
+str = "geeksforgeeks"
+print(leftmost(str))
+# output => g
+
+
+
+
+
+
+
+
+
+def leftmost(str):
+  count = [0] * 256
+  for i in range(len(str)):
+    count[ord(str[i])] += 1
+  for i in range(len(str)):
+    if count[ord(str[i])] > 1:
+      return i
+  return -1
+
+
+
+
+
+
+
+
+
+
+65 - 90 and 97 - 122
+def isPanagram(s):
+  for i in range(65, 91):
+    if chr(i) not in s and chr(i + 32) not in s:
+      return False
+  return True
+
+s = thequickbrownfoxjumpsoverthelazydog
+print(isPanagram(s))
+# output => True because all the alphabets are present in the string s
+
+
+# def missing_panagram(s):
+#   ch = [False] * 26
+#   for i in range(len(s)):
+#     if s[i] >= 'a' and s[i] <= 'z':             # if operation on m
+#       ch[ord(s[i]) - ord('a')] = True           # ord('m') - ord('a') => 109 - 97 => 12 => ch[12] = True
+#     elif s[i] >= 'A' and s[i] <= 'Z':
+#       ch[ord(s[i]) - ord('A')] = True
+#   res = ""
+#   for i in range(26):
+#     if ch[i] == False:
+#         res += chr(i + ord('a'))
+#   return res
+
+
+def missing_panagram(s):
+  ch = [False] * 26
+  for i in range(len(s)):
+    if s[i].isalpha():
+      if s[i].islower():
+        ch[ord(s[i]) - ord('a')] = True
+      else:
+        ch[ord(s[i]) - ord('A')] = True
+  res = ""
+  for i in range(26):
+    if ch[i] == False:
+      res += chr(i + ord('a'))
+  return res
+
+
+
+
+
+
+
+# left most non repeating character
+
+def left_most_nrepat(s):
+  for i in range(len(s)):
+    for j in range(i + 1, len(s)):
+      if s[i] == s[j]:
+        break
+      return i
+  return -1
+
+# this is better but do not work for all the cases
+
+def left_most_norep(s):
+  count = [0] * 256
+  for i in range(len(s)):
+    count[ord(s[i])] += 1
+  for i in range(len(s)):
+    if count[ord(s[i])] == 1:
+      return i
+  return -1
+
+
+# this is the best solution for this problem
+
+def left_most_norep(s):
+  count = [-1] * 256
+  for i in range(len(s)):
+    if count[ord(s[i])] == -1:
+      count[ord(s[i])] = i
+    else:
+      count[ord(s[i])] = -2  # it means that the character is repeating
+  res = float('inf')
+  for i in range(256):
+    if count[i] >= 0:
+      res = min(res, count[i])
+  return res if res != float('inf') else -1
+
+
+
+
+
+
+
+
+
+
+def reverse_words(s):
+  while start < end:
+    s[start], s[end] = s[end], s[start]
+    start += 1
+    end -= 1
+
+def reverse(s):
+  n = len(s)
+  s = list(s)
+  start = 0
+  for end in range(n):
+    if s[end] == ' ':                       # it will run till it find the space
+      reverse_words(s, start, end - 1)      # it will reverse the word                 like "welcome" => "emoclew"
+      start = end + 1                       # to count the space and start from the next word
+  reverse_words(s, start, n - 1)            # it will reverse the last word because there is no space after the last word so it will not reverse the last word
+  return "".join(s)                         # it will join the list and return the string
+
+
+
+
+
+
+
+
+
+
+def validate(s):
+  if len(s) < 10:
+    return False
+  digit = False
+  lower = False
+  upper = False
+  special = False
+  for i in range(len(s)):
+    if s[i].isdigit():
+      digit = True
+    elif s[i].islower():
+      lower = True
+    elif s[i].isupper():
+      upper = True
+    else:
+      special = True
+  return digit and lower and upper and special
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+############################################################################################################## linked list
+
+# Difference between array and linked list
+# 1. Array is a collection of elements of similar data type whereas the Linked list is a collection of elements of different data types.
+# 2. Array size is fixed whereas the linked list size is dynamic.
+# 3. Array elements are stored in contiguous memory locations whereas the linked list elements are stored in random memory locations.
+# 4. Array access time is fast whereas the linked list access time is slow.
+# 5. Array deletion or insertion is time consuming whereas the linked list deletion or insertion is fast.
+# 6. Array memory is allocated during compile time whereas the linked list memory is allocated during execution or runtime.
+# 7. Array elements can be accessed randomly whereas the linked list elements cannot be accessed randomly.
+# 8. Array elements are stored in stack memory whereas the linked list elements are stored in heap memory.
+
+
+
+
+# applications of linked list
+# 1. worst case insertion and deletion is O(1)
+# 2. insertion and deletion is fast in linked list
+# 3. Round robin scheduling algorithm
+# 4. Merging of two sorted linked list is easy
+# 5. implementation of stack and queue is easy
+
+'''
+class Node:
+    def __init__(self,data):
+        self.data=data
+        self.next=None
+'''
+def displayList(head):
+    curr = head
+    while curr != None:
+      print(curr.data, end=" ")
+      curr = curr.next
+
+def sumofElements(head):
+    curr = head
+    sum = 0
+    while curr != None:
+      sum += curr.data
+      curr = curr.next
+    return sum
+
+def search(head, x):
+  curr = head
+  position = 1
+  while curr != None:
+    if curr.data == x:
+      return position
+    else:
+      position += 1
+      curr = curr.next
+  return -1
+
+def insert(head, key):
+  temp = Node(key)
+  temp.next = head
+  return temp
+
+def insertAtEnd(head, key):
+    temp = Node(key)
+    if head == None:          # if the linked list is null then it will return the temp
+        return temp
+    curr = head
+    while curr.next != None:
+        curr = curr.next
+    curr.next = temp
+    return head
+
+def insertatPos(head, position, data):
+  newnode = Node(data)
+  if position == 1:
+    newnode.next = head
+    return newnode
+  curr = head
+  for i in range(position - 2):
+    curr = curr.next
+    if curr == None:
+      return head
+    newnode.next = curr.next
+    curr.next = newnode
+    return head
+
+
+# 45 at position 4  => temp = 45 and next is none
+# [10, 20, 30, 40, 50]
+# for loop iterates till 20 and curr = curr.next => 30
+# temp.next = curr.next => 45.next will be 40
+# curr.next = temp => 30.next will be 45
+
+
+def deleteFirst(head):
+  if head == None:
+      return None
+  newHead = head.next
+  head.next = None
+  return newHead
+
+
+################################################################################################# delete last node
+
+
+
+def deleteLast(head):
+  if head == None:                # if the linked list is empty
+    return None
+  if head.next == None            # it means that there is only one node in the linked list
+    return None
+  curr = head
+  while curr.next.next != None:   # it will iterate till the second last node
+    curr = curr.next
+  curr.next = None                # it will unlink the last node
+  return head
+
+############################################################################################# delete at position
+
+# to delete the node at the given position in the linked list we have to iterate till the previous node of the given position
+# and then we have to unlink the node at the given position and link the previous node to the next node of the given position
+
+def deleteAtPos(head, position):
+  if position == 1:                   # if the position is 1 then we have to delete the first node
+    newHead = head.next               # newHead will be the next node of the head and head.next will be None
+    head.next = None
+    return newHead
+  curr = head
+  for i in range(position - 2):      # it will iterate till the previous node of the given position and if the position is 3 then it will iterate till the 1.
+    curr = curr.next
+    if curr == None:                 # if the position is greater than the length of the linked list then it will return the head
+      return head
+  curr.next = curr.next.next         # it will unlink the node at the given position and link the previous node to the next node of the given position
+  return head
+
+
+
+# trick question
+
+# delete the node where pointer is pointing to the node to be deleted
+# swap the data of the node to be deleted with the next node
+def deleteNode(ptr):                         #    -> 10 -> 20 -> 30 -> 40 -> 50 ptr = 30 you need to delete 30 cant go back
+  temp = ptr.next                            #    temp = 40
+  ptr.data = temp.data                       #    ptr.data = 40        -> 10 -> 20 -> 40 -> 40 -> 50
+  ptr.next = temp.next                       #    ptr.next = temp.next => ptr.next = 50   drop the 40 node
+  temp.next = None                           #    temp.next = None
+  del temp                                   #    delete the temp node
+  return head
+
+
+
+
+
+
+
+##################################################################################################### sort the linked list
+
+def sort(head, x):
+  if head == None:
+    return None
+  temp = Node(x)
+  curr = head
+  # if the value of the node is less than the value of the head then the temp will be the new head like 10 -> 20 -> 30 -> 40 -> 50 and x = 5 then temp will be the new head
+  if x < curr.data:
+    temp.next = curr
+    return temp
+  # we use curr.next.data because we have to compare the value of the node with the value of the next node
+  # because we have to insert the node after the node whose value is less than the value of the node like 10 -> 20 -> 30 -> 40 -> 50 and x = 35 then temp will be inserted after 30
+  # note : curr.data < x will take curr as 40 do it iteration so we use curr.next.data------------------------------------------
+  while curr.next != None and curr.next.data < x: # Pattern : curr.next != None and curr.next.data < x -------------------------
+    curr = curr.next
+  temp.next = curr.next
+  curr.next = temp
+  return head                                      # while loop first check curr.next != None and then it will check curr.next.data < x because if the curr.next is None then it will give error
+
+
+
+
+
+
+
+
+
+
+
+############################################################################################ middle of the linked list
+
+def middle(head):
+  if head == None:
+    return None
+  curr = head
+  count = 0
+  while curr != None:
+    curr = curr.next
+    count += 1
+  curr = head
+  for i in range(count // 2):
+    curr = curr.next
+  return curr.data
+
+----------------------------------  OR  ----------------------------------
+
+def middle(head, data):
+  if head == None:
+    return None
+  temp = Node(data)
+  slow = head
+  fast = head
+  while fast != None and fast.next != None:
+    slow = slow.next
+    fast = fast.next.next
+  temp.next = slow.next
+  slow.next = temp
+  return head
+
+
+
+
+
+
+
+
+
+##########################################################################################  sorted - in ascending order or descending order
+
+def insorted(head):
+  if head == None:
+    return None
+  curr = head
+  increasing = True
+  decreasing = True
+  while curr.next != None:
+    if curr.data < curr.next.data:
+      decreasing = False
+    elif curr.data > curr.next.data:
+      increasing = False
+    curr = curr.next
+  return increasing or decreasing
+
+
+
+
+
+
+#############################################  nth node from end of linked list  #############################################
+def n_node(head, n):
+  length = 0
+  curr = head
+  while curr != None:
+    curr = curr.next
+    length += 1
+  if n > length:  # it should be outside the while loop because if the n is greater than the length of the linked list then it will return -1
+    return -1
+  curr = head
+  for i in range(length - n):
+    curr = curr.next
+  return curr.data
+
+
+
+----------------------------------  OR  ----------------------------------
+
+
+def n_node(head, n):
+  if head == None:
+    return None
+  slow  = head
+  fast = head
+  for i in range(n):
+    if fast == None:    # after the for loop if the fast is None then it means that the n is greater than the length of the linked list
+      return -1         # so check if the fast is None then return -1 if the fast is not None then continue the loop and increment the fast
+    fast = fast.next
+  while fast != None:
+    slow = slow.next
+    fast = fast.next
+  return slow.data
+
+
+
+
+
+
+
+
+def join(head1, head2):
+  if head1 == None:
+    return head2
+  if head2 == None:
+    return head1
+  curr = head1
+  while curr.next != None:
+    curr = curr.next
+  curr.next = head2
+  return head1
+
+
+
+
+
+
+
+
+
+
+def removedupli(head):
+  curr = head
+  while curr != None and curr.next != None: # curr.next != None because we have to compare the value of the node with the value of the next node
+    if curr.data == curr.next.data:
+      curr.next = curr.next.next     # unlink 10 -> 20 -> 20 -> 30 -> 30 => curr = 20 => curr.next = 20 => curr.next.next = 30 => curr.next = 30
+    else:
+      curr = curr.next
+  return head
+
+
+
+
+
+
+
+
+
+
+#############################################  reverse the linked list  #############################################
+
+def reverse(head):
+  stack = []
+  curr = head
+  while curr != None:
+    stack.append(curr.data)
+    curr = curr.next
+
+  curr = head
+  while curr != None:
+    curr.data = stack.pop()
+    curr = curr.next
+
+  return head
+
+
+
+
+
+----------------------------------  OR  ----------------------------------
+
+def reverse(head):
+  curr = head
+  prev = None    # prev = None because the last node will point to None and after 1 iteration the head will point to None
+  while curr != None:
+    next = curr.next   # its storing the next node of the current node in pointer next so that we dont loose link to the next node
+    curr.next = prev   # it will point the current node to the previous node
+    # now we have to move the prev and curr pointer to the next node
+    prev = curr        # prev will point to the current node
+    curr = next        # curr will point to the next node
+  return prev          # prev will point to the last node so return prev
+
+
+
+
+
+
+----------------------------------  OR  ----------------------------------
+
+def recursive_reverse(head):
+  if head == None or head.next == None:       # head is second last node
+    return head
+  rest_head = recursive_reverse(head.next)   # it will recursively call the function until the head.next == None and make recursive call stack for each node and rest head is last node
+  rest_tail = head.next                      #it will be the last node of the linked list named rest_tail
+  rest_tail.next = head                      # it will point the last node to the second last node
+  head.next = None                           # it will point the second last node to None -> none would be moving backwards from last at every stack frame
+  return rest_head
+
+
+
+
+----------------------------------  OR  ----------------------------------
+# it will reverse linked list reursively by using 2 pointers
+def recursive_reverse(head, prev = None):   # prev = None because the last node will point to None and after 1 iteration the head will point to None
+  if head == None:                          # this base case will return the last node because the last node will point to None and after 1 iteration the head will point to None
+    return prev
+  next = head.next
+  head.next = prev
+  return recursive_reverse(next, head)      # moving the prev and curr pointer to the next node
+
+
+
+def maximum(head):
+  if head == None:
+    return None
+  curr = head
+  max = head.data
+  while curr != None:
+    if curr.data > max:
+      max = curr.data
+    curr = curr.next
+  return max
+
+def minimum(head):
+  if head == None:
+    return None
+  curr = head
+  min = head.data         # min = float('inf')  # min = sys.maxsize
+  while curr != None:
+    if curr.data < min:
+      min = curr.data
+    curr = curr.next
+  return min
+
+
+
+
+
+
+def areidentical(head1, head2):
+  if head1 == None and head2 == None:
+    return False
+  curr1 = head1
+  curr2 = head2
+  while curr1 != None and curr2 != None:
+    if curr1.data == curr2.data:
+      curr1 = curr1.next
+      curr2 = curr2.next
+    else:
+      return False
+  if curr1 == None and curr2 == None:
+    return True
+
+  ----------------------------------  OR  ----------------------------------
+
+def areidentical(head1, head2):
+  while head1 != None and head2 != None:
+    if head1.data != head2.data:
+      return False
+    head1 = head1.next
+    head2 = head2.next
+  if head1 == None and head2 == None:
+    return True
+
+
+
+
+
+
+
+
+
+
+
+
+#################################################                                       circular linked list
+
+# advantages of circular linked list    -----------  There is no need to maintain the tail pointer in circular linked list
+
+# 1. we can traverse the whole linked list by using any node
+# 2. we can insert and delete the node at the beginning and end of the linked list in O(1) time complexity
+# 3. implementation of queue and stack is easy and round robin scheduling is done by using circular linked list
+
+# disadvantages of circular linked list
+
+# 1. Direct access of any node is not possible
+# 2. we can not traverse the linked list in backward direction
+# 3. we can not insert and delete the node at the middle of the linked list in O(1) time complexity
+
+
+
+# insert at the beginning of the circular linked list
+def insert_at_beginning(head, data):
+  temp = Node(data)
+  if head == None:
+    temp.next = temp
+    return temp
+  curr = head
+  while curr.next != head:
+    curr = curr.next
+  curr.next = temp
+  temp.next = head
+  return temp
+
+
+----------------------------------  OR  ----------------------------------
+
+def insert_at_beginning(head, data):
+  temp = Node(data)
+  if head is None:
+    temp.next = temp
+    return temp
+  temp.next = head.next
+  head.next = temp
+  head.data, temp.data = temp.data, head.data
+  return head
+
+
+
+
+
+# insert at the end of the circular linked list
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# is circular linked list
+
+def iscircular(head):
+  if head == None:
+    return True
+  curr = head
+  while curr != None and curr.next != head:
+    curr = curr.next
+  if curr == None:                                # if curr == None then it means that the linked list is not circular
+    return False
+  return True
+
+
+
+# split circular linked list into 2 halves
+def split(head):
+    if head == None:
+        return None
+    slow = head
+    fast = head
+    while fast.next != head and fast.next.next != head:
+        slow = slow.next
+        fast = fast.next.next
+    if fast.next.next == head:
+        fast = fast.next
+    head1 = head
+    head2 = slow.next
+    slow.next = head1
+    fast.next = head2
+    return head1, head2
+
+
+
+
+
+
+# delete a head node from the circular linked list
+def delete_head(head):
+  if head == None:
+    return None
+  if head.next == head:
+    return head.next
+  curr = head
+  while curr.next != head:
+    curr = curr.next
+  curr.next = head.next
+  head.next = None     # it is not necessary to write this line
+  return curr.next
+
+
+----------------------------------  OR  ----------------------------------
+
+def delete_head(head):
+  if head == None:
+    return None
+  if head.next == head:
+    return head.next
+  head.data = head.next.data
+  head.next = head.next.next
+  return head
+
+
+
+
+
+
+# delete a node from the circular linked list
+
+def deleteAtPosition(head, pos):
+  if head == None:
+    return None
+  elif head.next == head:
+    return None
+
+  if pos == 1:
+    head.data = head.next.data
+    head.next = head.next.next
+    return head
+
+  curr = head
+  for _ in range(pos - 2):
+    curr = curr.next
+  curr.next = curr.next.next
+  return head
+
+
+
+
+
+
+
+
+def insert_at_position(head, data, pos):
+  if head == None:
+    return None
+  temp = Node(data)
+  curr = head
+  if pos == 1:
+    while curr.next != head:
+      curr = curr.next
+    curr.next = temp
+    temp.next = head
+    return temp                                              ################         --- important
+  for _ in range(pos - 1):   # to insert we go to previos node of the position and to delete we go to the previous node of the position means we have to run the loop pos - 2 times
+    curr = curr.next
+    if curr == head:
+      return head
+  temp.next = curr.next
+  curr.next = temp
+  return head
+
+
+
+
+
+
+
+
+
+
+
+
+#########################################                        doubly linked list
+
+# advantages of doubly linked list
+
+# 1. we can traverse the linked list in both directions
+# 2. we can insert and delete the node at the beginning and end of the linked list in O(1) time complexity
+# 3. we can insert and delete the node at the middle of the linked list in O(1) time complexity if we have the pointer to the node
+
+# disadvantages of doubly linked list
+
+# 1. we have to maintain the previous pointer also so it will take extra space
+# 2. we can not traverse the linked list in backward direction if we don't have the previous pointer
+# 3. implementation of queue and stack is difficult as compared to singly linked list
+
+
+
+
+
+# display the doubly circular linked list
+
+def iscircular(head):
+    if head == None:
+        return True
+    curr = head
+    while curr.next != head:
+      if curr.next == None:
+        return False
+      curr = curr.next
+    return True
+
+
+
+----------------------------------  OR  ----------------------------------
+
+def iscircular(head):
+    if head == None:
+      return True
+    curr = head
+    while curr != None and curr.next != head:   # only when curr != None then only we will check for curr.next != head it means that if curr == None then there is no need to check for curr.next != head
+      curr = curr.next
+    if curr == None:
+      return False
+    return True
+
+
+
+
+
+
+
+# Doubly Linked list at given position
+
+def addNode(head, pos, data):
+  temp = Node(data)
+  curr = head
+  while p != 0:
+    curr = curr.next
+    p -= 1
+
+  if curr.next is None:
+    curr.next = temp
+    temp.prev = curr
+    return head
+  else:
+    temp.next = curr.next     # it means that we are inserting the node at the middle of the linked list
+    curr.next = temp
+    temp.prev = curr
+    return head
+
+
+----------------------------------  OR  ----------------------------------
+
+def addNode(head, pos, data):
+  temp = Node(data)
+  curr = head
+  for _ in range(pos):
+    curr = curr.next
+  temp.next = curr.next
+  curr.next = temp
+  temp.prev = curr
+  return head
+
+
+----------------------------------  OR  ----------------------------------
+
+
+def addNode(head, p, data):
+  temp = Node(data)
+  curr = head
+  for i in range(p):
+    curr = curr.next
+  if curr.next is not None:
+    temp.next = curr.next  # if you dont write this you will lose rest nodes
+    curr.next = temp
+    temp.prev = curr
+  else:
+    curr.next = temp
+    temp.prev = curr
+  return head
+
+
+
+
+
+# delete head of a doubly linked list
+
+def delete_head(head):
+  if head == None:
+    return None
+  if head.next == None:
+    return None
+  head = head.next
+  head.prev = None
+  return head
+
+
+
+
+
+
+
+
+# find middle of a circular doubly linked list
+
+def find_mid(head):
+  if head == None:
+    return None
+  if head.next == None:
+    return head
+  slow = head
+  fast = head
+  while fast.next != head and fast.next.next != head:
+    slow = slow.next
+    fast = fast.next.next
+  if fast.next.next == head:
+    fast = fast.next
+  return slow
+
+ ----------------------------------  OR  ----------------------------------
+
+ def find_mid(head):
+   if head is None and head.next is None:
+     return head
+   curr = head
+   length = 0
+   for _ in range(length//2):
+     curr = curr.next       # or if curr != None and curr.next != None: curr = curr.next.nexta
+    return curr.data
+
+
+
+
+ # delete a last node from a doubly linked list
+
+def delete_last(head):
+  if head is None and head.next is None:
+    return None
+  curr = head
+  while curr.next.next is not None:
+    curr = curr.next
+  curr.next = None
+  return head
+
+
+
+
+
+
+
+
+# delete a node from a doubly linked list
+
+def delete_node(head, pos):
+  curr = head
+  if pos == 1:
+    head = head.next
+    head.prev = None
+    return head
+  else:
+    while pos > 1:
+      curr = curr.next
+      pos -= 1
+    curr.prev.next = curr.next
+    if curr.next is not None:
+      curr.next.prev = curr.prev
+    return head
+
+
+
+
+
+
+
+
+def sortedInsert(head, data):
+  temp = Node(data)
+  if head == None:
+    return temp
+  if head.data > data:
+    temp.next = head
+    head.prev = temp
+    return temp
+  curr = head
+  while curr.next != None and curr.next.data < data:
+    curr = curr.next
+  temp.next = curr.next   # it means that if curr.next == None then temp.next = None
+  curr.next = temp
+  temp.prev = curr
+  if temp.next != None:   # it means that if temp.next == None then temp.next.prev = None so we have to check for temp.next != None
+    temp.next.prev = temp
+  return head
+
+
+
+
+
+
+
+
+
+def compareCll(head1, head2):
+  if head1 == None and head2 == None:
+    return 1
+  if head1 == None or head2 == None:
+    return 0
+  curr1 = head1
+  curr2 = head2
+  while curr1.next != head1 and curr2.next != head2:
+    if curr1.data != curr2.data:
+      return 0
+    curr1 = curr1.next
+    curr2 = curr2.next
+  if curr1.next == head1 and curr2.next == head2:
+    if curr1.data == curr2.data:
+      return 1
+    else:
+      return 0
+  return 0
+
+
+
+
+
+
+
+
+
+
+
+
+#########################################                        stack
+
+# stack is a linear data structure in which insertion and deletion of the element takes place at one end only
+# the end at which the insertion and deletion takes place is called top of the stack
+# the order in which the element is inserted into the stack is called LIFO (last in first out) or FILO (first in last out)
+
+
+# stack can be implemented using array and linked list
+# stack implemented using array is called static stack
+# stack implemented using linked list is called dynamic stack
+
+
+
+def push(data):
+  global top, stack, stackMax
+  if top == stackMax - 1:
+    print("Stack Full")
+  else:
+    top += 1
+    stack[top] = data
+
+def pop():
+  global top, stack
+  if top == -1:
+    print("Stack Empty")
+  else:
+    top -= 1
+
+def display():
+  global top, stack
+  if top == -1:
+    print("-1")
+  else:
+    for i in range(top, -1, -1):
+      print(stack[i], end = " ")
+    print()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# Implement stack using Linked List
+
+  class MyStack:
+    class StackNode:
+      # Constructor to initialize a node
+      def __init__(self, data):
+        self.data = data
+        self.next = None
+
+    def __init__(self):
+      self.head = None
+
+    def push(self, x):
+      new_node = self.StackNode(x)
+      new_node.next = self.head
+      self.head = new_node         # head is now the new node
+
+    def pop(self):
+      if self.head is None:
+        return -1
+      pop = self.head.data
+      self.head = self.head.next  # head next is now the new head
+      return popped_value
+
+
+# stack Applications
+
+# 1. Reversing a word
+# 2. Balancing of symbols
+# 3. Infix to Postfix / Prefix conversion
+# 4. Redo-Undo features at many places like editors, photoshop.
+# 5. Forward and backward feature in web browsers
+# 6. Used in many algorithms like Tower of Hanoi, tree traversals, stock span problem, histogram problem.
+# 7. Other applications can be Backtracking, Knight tour problem, rat in a maze, N queen problem and sudoku solver
+
+
+
+
+
+
+# Infix to Postfix
+
+def precedence(i):                # we are giving operator value according to their precedence so that we can compare them later
+  if i == "+" or i == "-":
+    return 1
+  if i == "*" or i == "/":
+    return 2
+  if i == "^":
+    return 3
+  else:
+    return 0
+
+def InfixtoPostfix(exp):
+  stack = []
+  result = ""
+  for i in exp:
+    if i.isalpha() or i.isdigit():
+      result += i
+    elif i == "(":
+      stack.append(i)
+    elif i == ")":
+      while stack is not None and stack[-1] != "(":
+        result += stack.pop()
+      stack.pop()
+    else:
+      if precedence(i) > precedence(stack[-1]):
+        stack.append(i)
+      else:
+        while stack is not None and precedence(i) <= precedence(stack[-1]):    # the scanned operator has less precedence than the operator in the stack then pop the stack and add it to the result
+          result += stack.pop()                                                # until the scanned operator has higher precedence
+        stack.append(i)
+    while stack is not None:
+      result += stack.pop()
+    return result
+
+
+
+
+
+
+
+
