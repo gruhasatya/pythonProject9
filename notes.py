@@ -142,26 +142,129 @@ print(d2)   # {1: 'Id1', 2: 'Id2', 3: 'Id3', 4: 'Id4', 5: 'Id5', 6: 'Id6', 7: 'I
 
 
 
-# c++ notes
+
+def missingNumber(arr, n):
+    start = 0
+    end = n-1
+    while start <= end:
+        mid = start + (end-start)//2
+        if arr[mid] == mid+1:
+            start = mid+1
+        else:
+            end = mid-1
+    return start+1
+
+if __name__ == '__main__':
+    arr = [10, 9, 7, 6, 3 ,1, 2, 4, 5
+    n = len(arr)
+    print(missingNumber(arr, n))
 
 
-include <iostream>
-using namespace std;
-
-bool is palindrome(string s, int i){
-    if(i == s.length()/2){
-        return true;
-    }
-    if(s[i] != s[s.length()-1-i]){
-        return false;
-    }
-    return is_palindrome(s, i+1);
-
-}
 
 
-int main(){
-    string s = "abba";
-    cout<<is_palindrome(s, 0);
-    return 0;
-}
+
+
+
+# find kth smallest element
+
+class solution:
+    def kthSmallest(self, arr, l, r, k):      # l = 0, r = len(arr)-1  arr = [7, 10, 4, 3, 20, 15]  k = 3
+        def partition(arr, l, r):
+            pivot = arr[r]                                  # pivot = 15
+            i = l-1                                         # i = -1
+            for j in range(l, r):                           # j = 0, 1, 2, 3, 4
+                if arr[j] < pivot:                          # arr[0] = 7 < 15 --> True i = 0, arr[1] = 10 < 15 --> True i = 1, arr[2] = 4 < 15 --> True i = 2, arr[3] = 3 < 15 --> True i = 3, arr[4] = 20 < 15 --> False
+                    i += 1
+                    arr[i], arr[j] = arr[j], arr[i]         # arr[0], arr[0] = arr[0], arr[0] --> arr[0] = 7 ... arr[3], arr[3] = arr[3], arr[3] --> arr[3] = 3 now arr = [7, 10, 4, 3, 20, 15] loop ends
+            arr[i+1], arr[r] = arr[r], arr[i+1]             # arr[3+1], arr[5] = arr[5], arr[3+1] --> arr[4], arr[5] = arr[5], arr[4] --> arr[4] = 15, arr[5] = 20 now arr = [7, 10, 4, 3, 15, 20]
+            return i+1                                      # return 4  now it means that the pivot is at the 4th index of the array and all the elements to the left of the pivot are smaller than the pivot
+                                                            # and all the elements to the right of the pivot are greater than the pivot
+
+        if l == r:                                          # 0 == 5 --> False
+            return arr[l]                                   # return arr[0] --> return 7
+        pos = partition(arr, l, r)                          # pos = 4
+        if pos == k-1:                                      # 4 == 3-1 --> False
+            return arr[pos]                                 # return arr[4] --> return 15
+        elif pos > k-1:                                     # 4 > 3-1 --> True
+            return self.kthSmallest(arr, l, pos-1, k)       # return self.kthSmallest(arr, 0, 4-1, 3) --> return self.kthSmallest(arr, 0, 3, 3)
+        else:                                               # 4 < 3-1 --> False
+            return self.kthSmallest(arr, pos+1, r, k)       # return self.kthSmallest(arr, 4+1, 5, 3) --> return self.kthSmallest(arr, 5, 5, 3)
+
+
+
+def print2largest(arr, n):
+    if n < 2:
+        return -1
+    arr.sort()
+    for i in range(n-2, -1, -1):   # it means that the loop will start from the second last element of the array and will end at the 0th index of the array and will decrement by 1
+        if arr[i] != arr[n-1]:
+            return arr[i]
+    return -1
+
+def print2largest(arr, n):
+    if n < 2:
+        return -1
+    arr.sort()
+    largest = arr[n-1]
+    for i in range(n-2, -1, -1):
+        if arr[i] != largest:
+            return arr[i]
+    return -1
+
+
+def print2largest(arr, n):
+    if n < 2:
+        return -1
+    arr.sort()
+    largest = float('-inf')
+    for i in range(n-1, -1, -1):
+        if arr[i] > largest and arr[i] != arr[n-1]:
+            largest = arr[i]
+            return arr[i]
+    return -1
+
+
+
+
+
+def custom_arrange(arr):
+    arr.sort()
+    n = len(arr)
+    res = []
+    start , end = 0, n-1
+    while start <= end:
+        if start == end:  # if the start and end are equal then it means that there is only one element left in the array and we have to append it to the result array
+            res.append(arr[start])
+            break
+        res.append(arr[end])
+        res.append(arr[start])
+        start += 1
+        end -= 1
+    return res
+
+
+
+
+class Node:
+    def __init__(self, data):
+        self.data = data
+        self.next = None
+
+class solution:
+    def reverse(self, head, k):
+        if head is None or head.next is None:
+            return head
+        prev = None
+        next = None
+        curr = head
+        count = 0
+        while curr is not None and count < k:
+            next_node = curr.next
+            curr.next = prev
+            prev = curr
+            curr = next_node
+            count += 1
+        if next_node is not None:
+            head.next = self.reverse(next_node, k)   # it means that the head.next will point to the next_node which is the head of the next k nodes
+        return prev
+

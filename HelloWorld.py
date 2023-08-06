@@ -37,10 +37,10 @@ def Palindrome_number(n):
   reverse = 0
   copy = n
   while copy > 0:                            # goes on till copy is greater then 0 if its less stops
-    last_digit = copy%10                     # takes last digit of n ex : 1221 -- 1 
+    last_digit = copy%10                     # takes last digit of n ex : 1221 -- 1
     reverse = reverse * 10 + last_digit     # 0*10+1 = 1, 1*10 + 2 = 12, 12*10+2= 122, 122*10+1= 1221
     copy = copy//10                          # removes the last digit of copy
-  
+
   if n == reverse:
     return True
   else:
@@ -80,7 +80,7 @@ def factorial(n):
       for i in range(1, n+1):
         fact = fact * i
       return fact
-      
+
 
 
 
@@ -2264,7 +2264,7 @@ def insertion_sort(arr):                                                     # a
     while j >= 0 and arr[j] > element:                                       # j = -1 , loop will not run
       arr[j+1] = arr[j]                                                      # arr[0] = 11                                                                             ==> [11 | 12 | 13 | 5 | 6]
       j -= 1                                                                 # 2nd iteration
-    arr[j+1] = element                                                       # i = 2 , element = 13 , j = 1 => 11
+    arr[j+1] = element                                                       # i = 2 , element = 13 , j = 1 => 12
   return arr                                                                 # j = 1 , arr[1] > element ==> 12 > 13 false , arr[2] = 13                                ==> [11 | 12 | 13 | 5 | 6]
                                                                              # 3rd iteration
                                                                              # i = 3 , element = 5 , j = 2 => 13
@@ -2736,19 +2736,19 @@ def Hoare_partion(arr, l, h):
     # Function that takes last element as pivot, places the pivot element at
     # its correct position in sorted list, and places all smaller elements
     # to left of pivot and all greater elements to right of pivot.
-    def lumoto_partition(self, arr, low, high):
-
-      # Index of smaller element and indicates the right position of
-      # pivot found so far.
-      i = (low - 1)
-      # Picking the pivot.
-      pivot = arr[high]
-
-      for j in range(low, high):
-        # If current element is smaller than or equal to pivot we increment
-        # the value of i and swap the values at ith and jth index.
-        if arr[j] <= pivot:
-          i = i + 1
+    def lumoto_partition(self, arr, low, high):                                                          # arr = [10, 80, 30, 90, 50, 70] l = 0, h = 5
+                                                                                                         # pivot = 70
+      # Index of smaller element and indicates the right position of                                     # i = -1
+      # pivot found so far.                                                                              # j = 0 to 4
+      i = (low - 1)                                                                                      # 10 < 70 true -> i = 0 -> [10, 80, 30, 90, 50, 70]
+      # Picking the pivot.                                                                               # j = 1
+      pivot = arr[high]                                                                                  # 80 < 70 false -> j = 2
+                                                                                                         # 30 < 70 true -> i = 1 -> [10, 30, 80, 90, 50, 70]
+      for j in range(low, high):                                                                         # j = 3
+        # If current element is smaller than or equal to pivot we increment                              # 90 < 70 false -> j = 4
+        # the value of i and swap the values at ith and jth index.                                       # 50 < 70 true -> i = 2 -> [10, 30, 50, 90, 80, 70]
+        if arr[j] <= pivot:                                                   # j = 5 -> loop ends swap pivot with i + 1 index to place pivot at its correct position and return i + 1->[10, 30, 50, 70, 80, 90]
+          i = i + 1                                                           # i would be only incremented if it finds less element than pivot to swap or else loop continues
           # Swapping of values at ith and jth index.
           arr[i], arr[j] = arr[j], arr[i]
 
@@ -4302,7 +4302,7 @@ def reverse(head):
   prev = None    # prev = None because the last node will point to None and after 1 iteration the head will point to None
   while curr != None:
     next = curr.next   # its storing the next node of the current node in pointer next so that we dont loose link to the next node
-    curr.next = prev   # it will point the current node to the previous node
+    curr.next = prev   # it will point  current node to the previous node
     # now we have to move the prev and curr pointer to the next node
     prev = curr        # prev will point to the current node
     curr = next        # curr will point to the next node
@@ -4949,27 +4949,315 @@ def precedence(i):                # we are giving operator value according to th
   else:
     return 0
 
-def InfixtoPostfix(exp):
+
+def infixToPostfix(exp):
   stack = []
-  result = ""
+  postfix = ""
   for i in exp:
     if i.isalpha() or i.isdigit():
-      result += i
+      postfix += i
     elif i == "(":
       stack.append(i)
     elif i == ")":
-      while stack is not None and stack[-1] != "(":
-        result += stack.pop()
+      while stack and stack[-1] != "(":
+        postfix += stack.pop()
       stack.pop()
     else:
-      if precedence(i) > precedence(stack[-1]):
+      if stack and precedence(i) > precedence(stack[-1]):
         stack.append(i)
       else:
-        while stack is not None and precedence(i) <= precedence(stack[-1]):    # the scanned operator has less precedence than the operator in the stack then pop the stack and add it to the result
-          result += stack.pop()                                                # until the scanned operator has higher precedence
+        while stack and precedence(i) <= precedence(stack[-1]):
+          postfix += stack.pop()
         stack.append(i)
-    while stack is not None:
-      result += stack.pop()
+
+  while stack:
+    postfix += stack.pop()
+  return postfix
+
+
+
+
+def preToInfix(pre_exp):
+  stack = []
+  for i in range(len(pre_exp) - 1, -1, -1):
+    if pre_exp[i].isalpha() or pre_exp[i].isdigit():
+      stack.append(pre_exp[i])
+    else:
+      op1 = stack.pop()
+      op2 = stack.pop()
+      stack.append("(" + op1 + pre_exp[i] + op2 + ")")
+  return stack.pop()
+
+
+
+
+
+
+def postToInfix(post_exp):
+  stack = []
+  for i in range(len(post_exp)):
+    if post_exp[i].isalpha() or post_exp[i].isdigit():
+      stack.append(post_exp[i])
+    else:
+      op2 = stack.pop()
+      op1 = stack.pop()
+      stack.append("(" + op1 + post_exp[i] + op2 + ")")
+  return stack.pop()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+def removeConsecutiveDuplicates(s):
+  stack = []
+  for i in s:
+    if stack and stack[-1] == i:
+      continue
+    else:
+      stack.append(i)
+  return "".join(stack)
+
+
+---------------------------------------------- OR -----------------------------------------------------
+
+def removeConsecutiveDuplicates(s):
+  stack = 1
+  stack.append(s[0])
+  curr = 1
+  while curr < len(s):
+    if stack[-1] != s[curr]:
+      stack.append(s[curr])
+    curr += 1
+  return "".join(stack)  # ans = ""
+                         # for i in stack:
+                         #    ans += i
+                         # return ans
+
+
+
+
+
+
+
+
+def removepair(s):
+  stack = []
+  for i in s:
+    if stack and stack[-1] == i:    # if stack is not empty and stack top is equal to i then pop the stack
+      stack.pop()
+    else:
+      stack.append(i)
+  if stack:
+    return "".join(stack)
+  else:
+    return "Empty String"
+
+
+
+
+
+
+
+def parenthesis(s):
+  stack = []
+  for i in s:
+    if i == "(" or i == "{" or i == "[":
+      stack.append(i)
+    else:
+      if stack and stack[-1] == "(" and i == ")":
+        stack.pop()
+      elif stack and stack[-1] == "{" and i == "}":
+        stack.pop()
+      elif stack and stack[-1] == "[" and i == "]":
+        stack.pop()
+      else:
+        return False
+  if stack:
+    return False
+  else:
+    return True
+
+
+
+
+
+
+
+
+####   stack with getMin() in O(1) time complexity
+
+class MyStack:
+  def __init__(self):
+    self.stack = []
+    self.min = None
+
+  def push(self, x):
+    if self.stack == []:
+      self.stack.append(x)
+      self.min = x
+    elif x < self.min:
+      self.stack.append(2 * x - self.min)
+      self.min = x
+    else:
+      self.stack.append(x)
+
+  def pop(self):
+    if self.stack == []:
+      return -1
+    elif self.stack[-1] < self.min:
+      self.min = 2 * self.min - self.stack[-1]
+      self.stack.pop()
+    else:
+      self.stack.pop()
+
+  def top(self):
+    if self.stack == []:
+      return -1
+    elif self.stack[-1] < self.min:
+      return self.min
+    else:
+      return self.stack[-1]
+
+  def getMin(self):
+    if self.stack == []:
+      return -1
+    else:
+      return self.min
+
+
+
+# 1. Push the first element to stack.
+# 2. Compare the second element with the top element in stack and push the smaller one to stack.
+# 3. For every other element, compare it with min element and push the smaller one.
+#    So after pushing every element, the top of stack will always be the minimum.
+
+# 4. While popping, we will check if the popped element is less than the min element, then the min element
+#    will be changed to (2*min_element – popped element), this is done to retrieve the last minimum element from the popped element.
+
+# 5. For example, let us assume we pushed {3, 5, 2, 1} consecutively and the min element is 1.
+#    Now when we encounter 2, we push (2*1-2) i.e. 0 instead of 2 and change min element to 2.
+
+# 6. Now, if we encounter 1, instead of pushing 1, we push (2*2-1) i.e. 3, and change min element to 1.
+#    This is how we always retrieve previous minimum element from the current minimum element.
+
+# 7. While popping, if we encounter a number less than the current minimum element, we retrieve previous minimum from current minimum and change the current minimum to (2*currentMinimum – poppedElement).
+#    This is how the previous minimum element always stays in the stack and we get the correct minimum element even after popping the current minimum element.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#############################################                                                                    Deque
+
+# Deque or Double Ended Queue is a generalized version of Queue data structure that allows insert and delete at both ends.
+# Operations on Deque:
+# Mainly the following four basic operations are performed on queue:
+
+# push_front(): Adds an item at the front of Deque.
+# push_back(): Adds an item at the rear of Deque.
+# pop_front(): Deletes an item from front of Deque.
+# pop_back(): Deletes an item from rear of Deque.
+
+# In addition to above operations, following operations are also supported
+# getFront(): Gets the front item from queue.
+# getRear(): Gets the last item from queue.
+# isEmpty(): Checks whether Deque is empty or not.
+# isFull(): Checks whether Deque is full or not.
+
+# Applications of Deque:
+# Since Deque supports both stack and queue operations, it can be used as both.
+# The Deque data structure supports clockwise and anticlockwise rotations in O(1) time which can be useful in certain applications.
+# Also, the problems where elements need to be removed and or added both ends can be efficiently solved using Deque.
+# For example see Maximum of all subarrays of size k problem, 0-1 BFS, Sliding Window Maximum and First negative integer in every window of size k.
+
+
+
+
+
+
+
+
+# Linked List Implementation of Deque
+
+class Node:
+  def __int__(self,data):
+    self.data = None
+    self.next = None
+    self.prev = None
+
+class Deque:
+  def __init__(self):
+    self.front = None
+    self.rear = None
+
+  def size(self):
+    return self.count
+
+  def isEmpty(self):
+    return self.count == 0
+
+  def insertRear(self,x):
+    temp = Node(x)
+    if self.rear is None:
+      self.front = self.rear = temp
+    else:
+      self.rear.next = temp
+      temp.prev = self.rear
+      self.rear = temp
+      self.count += 1
+
+  def insertFront(self,x):
+    temp = Node(x)
+    if self.front is None:
+      self.front = self.rear = temp
+    else:
+      temp.next = self.front
+      self.front.prev = temp
+      self.front = temp
+      self.count += 1
+
+  def deleteFront(self):
+    if self.front is None:
+      return -1
+    else:
+      result = self.front.data
+      self.front = self.front.next
+      if self.front is None:
+        self.rear = None
+      else:
+        self.front.prev = None
+        self.count -= 1
+    return result
+
+  def deleteRear(self):
+    if self.rear is None:
+      return -1
+    else:
+      result = self.rear.data
+      self.rear = self.rear.prev
+      if self.rear is None:
+        self.front = None
+      else:
+        self.rear.next = None
+        self.count -= 1
     return result
 
 
@@ -4977,5 +5265,2274 @@ def InfixtoPostfix(exp):
 
 
 
+
+
+# list implementation of deque
+
+class Deque:
+  def __init__(self, c):
+    self.l = [None] * c
+    self.cap = c
+    self.size = 0
+    self.front = 0
+
+  def DeleteFront(self):
+    if self.size == 0:
+      return
+    else:
+      res = self.l[self.front]
+      self.front = (self.front + 1) % self.cap
+      self.size += 1
+      return res
+
+  def DeleteRear(self):
+    if self.size == 0:
+      return None
+    else:
+      rear = (self.front + self.size - 1) % self.cap
+      self.size -= 1
+      return self.l[rear]
+
+  def InsertFront(self, x):
+    if self.size == self.cap:
+      return None
+    else:
+      self.front = (self.front - 1) % self.cap
+      self.l[self.front] = x
+      self.size += 1
+
+
+
+  def InsertRear(self, x):
+    if self.size == self.cap:
+      return None
+    else:
+      rear = (self.front + self.size) % self.cap
+      self.l[rear] = x
+      self.size += 1
+
+  def frontElement(self):
+    return self.l[self.front]
+
+  def rearElement(self):
+    rear = (self.front + self.size - 1) % self.cap
+    return self.l[rear]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# Python code to demonstrate working of
+
+def deque(arr, n):
+  dq = deque()
+  for i in range(n):
+    dq.append(arr[i])
+  return dq
+
+def printDeque(dq):
+  for x in dq:
+    print(x, end=" ")
+  print()
+
+
+--------------------------------------------- OR ---------------------------------------------------
+
+def printDeque(dq):
+  while dq:
+    print(dq.popleft(), end=" ")
+  print()
+
+
+
+
+
+
+def eraseAtPos(deq, x):
+  deq = deque()
+  deq.remove(x)
+  return deq
+
+
+
+def eraseInRange(dq, s, e):
+  dq = deque()
+  for i in range(len(dq)):
+    if i >= s and i < e:
+      dq.remove(dq[i])
+    else:
+      dq.append(dq[i])
+    return dq
+
+def eraseInRange(dq, start, end):
+  dq = deque()
+  for i in range(len(dq)):
+    if i < start or i > end:
+      dq.append(dq[i])
+  return dq
+
+def eraseAll(deq):
+  deq = deque()
+  return deq
+
+
+
+
+
+
+
+
+
+
+
+
+#############################################                                                                    Queue
+
+# Queue is a linear structure which follows a particular order in which the operations are performed.
+# The order is First In First Out (FIFO).
+# A good example of queue is any queue of consumers for a resource where the consumer that came first is served first.
+
+# Operations on Queue:
+# Mainly the following four basic operations are performed on queue:
+
+# Enqueue: Adds an item to the queue. If the queue is full, then it is said to be an Overflow condition.
+# Dequeue: Removes an item from the queue. The items are popped in the same order in which they are pushed.
+# If the queue is empty, then it is said to be an Underflow condition.
+# Front: Get the front item from queue.
+# Rear: Get the last item from queue.
+
+# Applications of Queue:
+# Queue is used when things don’t have to be processed immediatly, but have to be processed in First InFirst Out order like Breadth First Search.
+# This property of Queue makes it also useful in following kind of scenarios.
+# 1) When a resource is shared among multiple consumers. Examples include CPU scheduling, Disk Scheduling.
+# 2) When data is transferred asynchronously (data not necessarily received at same rate as sent) between two processes.
+# Examples include IO Buffers, pipes, file IO, etc.
+
+# There are various ways of implementing a queue in Python. This article covers the implementation of queue using data structures and modules from Python library.
+# Queue in Python can be implemented by the following ways:
+
+# list
+# collections.deque
+# queue.Queue
+# queue.PriorityQueue
+
+# list is a built-in data structure of Python available with all data types, it is used to store collection of data.
+# list follows the First In First Out (FIFO) rule.
+
+class Queue:
+  def __init__(self, c):
+    self.queue = []
+    self.front = self.rear = 0
+    self.cap = c
+
+  def Enqueue(self, data):
+    if self.cap == self.rear:
+      print("Queue is full")
+    else:
+      self.queue.append(data)
+      self.rear += 1
+
+  def Dequeue(self):
+    if self.front == self.rear:
+      print("Queue is empty")
+    else:
+      x = self.queue.pop(0)
+      self.rear -= 1
+      return x
+
+  def QueueFront(self):
+    if self.front == self.rear:
+      print("Queue is empty")
+    else:
+      return self.queue[self.front]
+
+  def QueueRear(self):
+    if self.front == self.rear:
+      print("Queue is empty")
+    else:
+      self.queue[self.rear - 1]
+
+  def QueueSize(self):
+    return self.rear - self.front
+
+  def isEmpty(self):
+    return self.front == self.rear
+
+  def isFull(self):
+    return self.rear == self.cap
+
+  def printQueue(self):
+    if self.front == self.rear:
+      print("Queue is empty")
+    else:
+      for i in range(self.front, self.rear):
+        print(self.queue[i], end=" ")
+      print()
+
+
+--------------------------------------------- OR ---------------------------------------------------
+
+class Queue:
+
+  def __init__(self, c):
+    self.cap = c
+    self.queue = [None] * c
+    self.size = 0
+    self.front = 0
+
+  def isEmpty(self):
+    return self.size == 0
+
+  def isFull(self):
+    return self.size == self.cap
+
+  def getFront(self):
+    if self.isEmpty()
+      return None
+    else:
+      return self.queue[self.front]
+
+  def getRear(self):
+    if self.isEmpty():
+      return None
+    else:
+      return (self.front + self.size - 1) % self.cap
+
+  def Enqueue(self, x):
+    if self.isFull():
+      return -1
+    else:
+      rear = self.getRear()
+      rear = (rear + 1) % self.cap
+      self.queue[rear] = x
+      self.size += 1
+
+  def Dequeue(self):
+    if self.isEmpty():
+      return -1
+    else:
+      res = self.queue[self.front]
+      self.front = (self.front + 1) % self.cap
+      self.szie -= 1
+      return res
+
+
+  def printQueue(self):
+    if self.isEmpty():
+      return -1
+    else:
+      for i in range(self.front, self.front + self.size):
+        print(self.queue[i], end=" ")
+      print()
+
+
+  def QueueSize(self):
+    return self.size
+
+
+
+
+
+
+
+
+###########################################################################             implementation of queue using linked list
+
+
+class Node:
+    def __init__(self, data):
+        self.data = data
+        self.next = None
+
+class Queue:
+  def __init__(self):
+    self.front = self.rear = None
+
+  def push(self, x):
+    node = Node(x)
+    if self.rear == None:
+      self.front = self.rear = node
+      return
+    self.rear.next = node
+    self.rear = node
+
+  def pop(self):
+    if self.front == None:
+      return -1
+    res = self.front.data
+    self.front = self.front.next
+    if self.front == None:
+      self.rear = None
+    return res
+
+  def printQueue(self):
+    if self.front == None:
+      print("Queue is empty")
+    else:
+      temp = self.front
+      while temp:
+        print(temp.data, end=" ")
+        temp = temp.next
+      print()
+
+  def QueueFront(self):
+    if self.front == None:
+      return -1
+    return self.front.data
+
+  def QueueRear(self):
+    if self.rear == None:
+      return -1
+    return self.rear.data
+
+  def isEmpty(self):
+    return self.front == None
+
+  def isFull(self):
+    return self.rear == None
+
+
+
+
+
+
+#############################################                                                                    Stack
+
+class solution:
+
+  def __init__(self):
+    self.q = []
+
+  def push(self, q, x):
+    q.append(x)
+    return q
+
+  def pop(self, q):
+    if len(q) == 0:
+      return -1
+    return q.pop()
+
+  def front(self, q):
+    if len(q) == 0:
+      return -1
+    return q[0]
+
+  def find(self, q, x):
+    return x in q
+
+
+
+
+
+#############################################                                                                    Tree Data Structure
+
+# A tree is a hierarchical data structure defined as a collection of nodes. Nodes represent values and are connected by edges.
+# The topmost node in the tree is called the root. The elements that are directly under an element are called its children.
+# The element directly above something is called its parent. For example, ‘a’ is a child of ‘f’, and ‘f’ is the parent of ‘a’.
+
+# A tree is a nonlinear data structure, compared to arrays, linked lists, stacks and queues which are linear data structures.
+# A tree can be empty with no nodes or a tree is a structure consisting of one node called the root and zero or one or more subtrees.
+
+# Properties of Trees:
+# 1) One node is marked as Root node.
+# 2) Every node other than the root is associated with one parent node.
+# 3) Each node can have an arbitrary number of child nodes.
+
+# Types of Trees:
+# 1) Binary Tree          -> A tree whose elements have at most 2 children is called a binary tree.
+# 2) General Tree         -> A tree whose elements have more than 2 children is called a general tree.
+# 3) Balanced Tree        -> A tree is balanced if the height of the tree is O(Log n) where n is the number of nodes.
+# 4) Binary Search Tree   -> A binary tree is a binary search tree (BST) if all the non-empty nodes follows both two properties:
+#                            a) If node has a left child, then all the values in its left subtree are smaller than the value of the current node.
+#                            b) If node has a right child, then all the values in its right subtree are greater than the value of the current node.
+# 5) Complete Binary Tree -> A binary tree is a complete binary tree if all the levels are completely filled except possibly the last level and the last level has all keys as left as possible.
+# 6) Full Binary Tree     -> A binary tree is a full binary tree if every node has 0 or 2 children.
+# 7) Perfect Binary Tree  -> A binary tree is a perfect binary tree if all the internal nodes have two children and all leaf nodes are at the same level.
+# 8) Degenerate Tree      -> A tree where every internal node has one child. Such trees are performance-wise same as linked list.
+
+
+
+# A tree can be traversed in two ways:
+# 1) Depth First Traversal (or) Depth First Search (DFS)
+# 2) Breadth First Traversal (or) Breadth First Search (BFS)
+
+
+
+# Applications of Trees:
+
+# 1) Manipulate hierarchical data.
+# 2) Make information easy to search (see tree traversal).
+# 3) Manipulate sorted lists of data.
+# 4) As a workflow for compositing digital images for visual effects.
+# 5) Router algorithms
+# 6) Form of a multi-stage decision-making (see business chess).
+# 7) Compilers
+# 8) File system
+# 9) Syntax tree
+# 10) Document Object Model
+# 11) Decision tree learning
+# 12) Abstract syntax tree
+# 13) Minimax
+# 14) Huffman coding
+# 15) B+ tree and B-tree
+# 16) Red-black tree
+# 17) Splay tree
+# 18) Expression tree
+# 19) Treap
+# 20) T-tree and R-tree
+
+
+
+# Depth First Traversals:
+
+# (a) Inorder (Left, Root, Right) : 4 2 5 1 3
+# (b) Preorder (Root, Left, Right) : 1 2 4 5 3
+# (c) Postorder (Left, Right, Root) : 4 5 2 3 1
+
+
+class Node:
+  def __init__(self, data):
+    self.data = data
+    self.left = None
+    self.right = None
+
+  def inorder(self, root):
+    if root is not None:
+      self.inorder(root.left)
+      print(root.data, end=" ")
+      self.inorder(root.right)
+
+  def preorder(self, root):
+    if root is not None:
+      print(root.data, end=" ")
+      self.preorder(root.left)
+      self.preorder(root.right)
+
+  def postorder(self, root):
+    if root is not None:
+      self.postorder(root.left)
+      self.postorder(root.right)
+      print(root.data, end=" ")
+
+
+
+  def levelorder(self, root):
+    if root is None:
+      return
+    q = []
+    q.append(root)
+    while len(q) > 0:
+      node = q.pop(0)
+      print(node.data, end=" ")
+      if node.left is not None:
+        q.append(node.left)
+      if node.right is not None:
+        q.append(node.right)
+    return q
+
+
+---------------------------------------------------- OR ----------------------------------------------------
+def levelorder(root):
+  res = []
+  if root is None:
+    return
+  for i in range(1,height(root)+1):
+    res.append(printGivenLevel(root,i))
+  return res
+
+def printGivenLevel(root, level):
+  if root is None:
+    return
+  if level == 1:
+    print(root.data, end=" ")
+  elif level > 1:
+    printGivenLevel(root.left, level-1)
+    printGivenLevel(root.right, level-1)
+
+
+def height(root):
+  if root is None:
+    return 0
+  else:
+    lheight = height(root.left)
+    rheight = height(root.right)
+    if lheight > rheight:
+      return lheight+1
+    else:
+      return rheight+1
+
+
+
+####################################################                                                       Print all nodes at distance k from a given node
+
+
+def printKDistanceNode(root, k):
+  if root is None:
+    return
+  if k == 0:
+    print(root.data, end=" ")
+  else:
+    printKDistanceNode(root.left, k-1)
+    printKDistanceNode(root.right, k-1)
+
+
+
+
+
+def isIdentical(root1, root2):
+  if root1 is None and root2 is None:
+    return True
+  q1 = []
+  q2 = []
+  q1.append(root1)
+  q2.append(root2)
+  while len(q1) > 0 and len(q2) > 0:
+    n1 = q1.pop(0)
+    n2 = q2.pop(0)
+    if n1.data != n2.data:
+      return False
+    if n1.left is not None and n2.left is not None:
+      q1.append(n1.left)
+      q2.append(n2.left)
+    if n1.right is not None and n2.right is not None:
+      q1.append(n1.right)
+      q2.append(n2.right)
+    return True
+
+
+
+
+
+
+
+
+
+
+
+def size(root):
+  if root is None:
+    return 0
+  else:
+    return size(root.left) + size(root.right) + 1
+
+
+import math
+def maximum(root):
+  if root is None:
+    return float("-inf")
+  else:
+    return max(maximum(root.left), maximum(root.right), root.data)
+
+---------------------------------------------------- OR ----------------------------------------------------
+
+def maximum(root):
+  if root is None:
+    return float("-inf")
+  else:
+    res = root.data
+    lres = maximum(root.left)
+    rres = maximum(root.right)
+    if lres > res:
+      res = lres
+    if rres > res:
+      res = rres
+    return res
+
+
+
+def minimum(root):
+  if root is None:
+    return float("inf")
+  else:
+    return min(minimum(root.left), minimum(root.right), root.data)
+
+---------------------------------------------------- OR ----------------------------------------------------
+
+
+def minimum(root):
+  if root is None:
+    return -1
+  else:
+    res = root.data
+    lres = minimum(root.left)
+    rres = minimum(root.right)
+    if lres != -1 and lres < res:    # it would be -1 at end of tree and we don't want to compare -1 with res that's why we are avoiding it
+      res = lres
+    if rres != -1 and rres < res:
+      res = rres
+    return res
+
+
+---------------------------------------------------- OR ----------------------------------------------------
+
+def minimum(root):
+  if root is None:
+    return -1
+  while root.left is not None:
+    root = root.left
+  return root.data
+
+
+
+
+# check for Balanced Tree
+  class Solution:
+    def height(self, root):
+      if root is None:
+        return 0
+      lh = self.height(root.left)
+      rh = self.height(root.right)
+      if lh == -1 or rh == -1 or abs(lh - rh) > 1:   # this is the main logic to check for balanced tree
+        return -1
+      return max(lh, rh) + 1
+
+    def isBalanced(self, root):
+      return self.height(root) != -1
+
+# If either the left or right subtree returns -1, it indicates that the subtree is already imbalanced.
+# In that case, we propagate the -1 upwards by returning -1 from the current node.
+
+
+---------------------------------------------------- OR ----------------------------------------------------
+
+
+class solution:
+  f = True
+  def height(self, root):
+    if root is None:
+      return 0
+    lh = self.height(root.left)
+    rh = self.height(root.right)
+    if abs(lh - rh) > 1:
+      self.f = False
+    return max(lh, rh) + 1     # to continue the recursion
+
+  def isBalanced(self, root):
+    self.f = True
+    self.height(root)
+    return self.f
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  # children sum parent
+
+  def sum(self, root):
+    if root is None or (root.left is None and root.right is None):
+      return True
+    sum = 0
+    if root.left is not None:
+      sum += root.left.data
+    if root.right is not None:
+      sum += root.right.data
+    if root.data == sum and self.sum(root.left) and self.sum(root.right):
+      return True
+    return False
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#################################                                                                   Binary Search Tree
+
+# A binary search tree (BST) is a node based binary tree data structure which has the following properties.
+# • The left subtree of a node contains only nodes with keys less than the node’s key.
+# • The right subtree of a node contains only nodes with keys greater than the node’s key.
+# • Both the left and right subtrees must also be binary search trees.
+
+# Inorder traversal of a BST always produces sorted output.
+# We can construct a BST with only Preorder or Postorder or Level Order traversal. Note that we can always get inorder traversal by sorting the only given traversal.
+
+# Time Complexity: The worst case time complexity of search and insert operations is O(h) where h is height of Binary Search Tree.
+# In worst case, we may have to travel from root to the deepest leaf node.
+# The height of a skewed tree may become n and the time complexity of search and insert operation may become O(n).
+
+# Time Complexity: The worst case time complexity of delete operation is O(h) where h is height of Binary Search Tree.
+# In worst case, we may have to travel from root to the deepest leaf node.
+# The height of a skewed tree may become n and the time complexity of delete operation may become O(n).
+.
+
+# Time Complexity: if tree is balanced then O(logn) else O(n)`
+
+
+
+
+
+
+
+
+def search(root, data):
+  if root is None:
+    return None
+  if root.data == data:
+    return root
+  if root.data < data:
+    return search(root.right, data)
+  else:
+    return search(root.left, data)
+
+---------------------------------------------------- OR ----------------------------------------------------
+
+def search(root, data):
+  while root is not None:
+    if root.data == data:
+      return root
+    if root.data < data:
+      root = root.right
+    else:
+      root = root.left
+  return -1
+
+
+
+
+
+
+
+############## insert
+
+def insert(root, data):
+  if root is None:
+    return Node(data)
+  if root.data == data:
+    return root
+  if root.data > data:
+    root.left = insert(root.left, data)
+  else:
+    root.right = insert(root.right, data)
+  return root
+
+
+---------------------------------------------------- OR ----------------------------------------------------
+
+def insert(root, data):
+  parent = None
+  curr = root
+  while curr is not None:
+    parent = curr
+    if curr.data == data:
+      return root
+    if curr.data > data:
+      curr = curr.left
+    else:
+      curr = curr.right
+  if parent is None:
+    return Node(data)
+  if parent.data > data:
+    parent.left = Node(data)
+  else:
+    parent.right = Node(data)
+  return root
+
+
+
+
+
+
+def delete(root, x):
+  if root is None:
+    return None
+  if root.data > x:                           # root.data is greater than x so we will search in left subtree like if root.data = 10 and x = 5 then we will search in left subtree
+    root.left = delete(root.left, x)
+  elif root.data < x:
+    root.right = delete(root.right, x)
+  else:
+    if root.left is None:
+      return root.right
+    elif root.right is None:
+      return root.left
+    else:
+      succ = getsucc(root.right)
+      root.data = succ.data
+      root.right = delete(root.right, succ)
+  return root
+
+def getsucc(root):
+  curr = root                                   # curr is root because we are finding the inorder successor means the smallest element in the right subtree
+  while curr.left is not None:
+    curr = curr.left
+  return curr
+
+
+
+
+
+
+
+
+def floor(root, x):
+  res = -1
+  while root is not None:
+    if root.data == x:
+      return root.data
+    elif root.data > x:
+      root = root.left
+    else:
+      res = root.data
+      root = root.right
+  return res
+
+def ceil(root, x):
+  if root is None:
+    return -1
+  res = -1
+  while root is not None:
+    if root.data == x:
+      return root.data
+    elif root.data < x:
+      root = root.right
+    else:
+      res = root.data
+      root = root.left
+  return root
+
+# the ceil of x is the smallest element in BST greater than or equal to x, and the floor is the greatest element smaller than or equal to x.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#################################                                                                   self balancing BST
+
+# Self-balancing binary search trees such as AVL tree, red-black tree and Splay tree are height-balanced.
+# Self-balancing BSTs are used to get all advantages of BSTs without much increase in time complexity - O(Log n) for insert, search and delete.
+
+# left rotation and right rotation are used to balance the tree
+
+# left rotation
+# 1. set x = root.right
+# 2. set root.right = x.left
+# 3. set x.left = root
+# 4. set root = x
+
+# right rotation
+# 1. set x = root.left
+# 2. set root.left = x.right
+# 3. set x.right = root
+# 4. set root = x
+
+# Applications of self-balancing BST
+# 1. It is used in many search applications where data is constantly entering/leaving, such as the map and set objects in many languages' libraries.
+# 2. It is used to implement associative arrays.
+# 3. It is used to implement priority queues.
+# 4. It is used to implement graph algorithms like Kruskal's algorithm and Prim's algorithm.
+# 5. It is used in many database applications like indexing, caching, etc.
+
+# Advantages of self-balancing BST over Hash Table
+# 1. We can get all keys in sorted order by just doing Inorder Traversal of BST. This is not a natural operation in Hash Tables and requires extra efforts.
+# 2. Doing order statistics, finding closest lower and greater elements, doing range queries are easy to do with BSTs. Like sorting, these operations are not a natural operation with Hash Tables.
+# 3. BSTs are easy to implement compared to hashing, we can easily implement our own customized BST. To implement Hashing, we generally rely on libraries provided by programming languages.
+# 4. With Self-Balancing BSTs, all operations are guaranteed to work in O(Logn) time. But with Hashing, Θ(1) is average time and some particular operations may be costly, especially when table resizing happens.
+
+# Disadvantages of BST over Hash Table
+# 1. We can not get all keys in sorted order by just doing Inorder Traversal (Inorder Traversal gives keys in sorted order only if BST is balanced, otherwise result is not sorted).
+# 2. Insertion and Deletion, both operations are costly as we have to maintain the height property.
+# 3. Self-balancing BST are somewhat complex to implement compared to hashing.
+
+
+
+# AVL tree
+# An AVL tree is a self-balancing Binary Search Tree (BST) where the difference between heights of left and right subtrees cannot be more than one for all nodes.
+# An AVL tree is a BST such that for every internal node v of T, the heights of the children of v can differ by at most 1.
+# AVL tree checks the height of the left and the right sub-trees and assures that the difference is not more than 1.
+# This difference is called the Balance Factor.
+
+# Balance Factor = (Height of Left Subtree - Height of Right Subtree) or (Height of Right Subtree - Height of Left Subtree)
+
+# The self-balancing property of an AVL tree is maintained by the balance factor.
+# The value of balance factor should always be -1, 0 or 1.
+# If the value of balance factor is less than -1 or greater than 1 then the tree becomes unbalanced and we need to balance the tree to make it stable.
+# The balancing of the tree is done by performing the rotation operations.
+# The balancing operation does not change the inorder traversal of a tree.
+
+# Time Complexity: The rotation operations (left and right rotate) take constant time as only few pointers are being changed there.
+# Updating the height and getting the balance factor also takes constant time.
+# So the time complexity of AVL insert remains same as BST insert which is O(h) where h is height of the tree.
+# Since AVL tree is balanced, the height is O(Logn).
+# So time complexity of AVL insert is O(Logn).
+
+
+
+
+
+
+
+
+
+class Node(object):
+  self.data = data
+  self.left = None
+  self.right = None
+  self.height = 0
+
+class AVL(object):
+
+  def height(self, root):
+    if root is None:
+      return -1
+    return root.height
+
+  def getbalance(self, root):
+    if root is None:
+      return 0
+    return self.height(root.left) - self.height(root.right)
+
+  def leftrotate(self, z):
+    y = z.right
+    T2 = y.left
+    y.left = z
+    z.right = T2
+    z.height = 1 + max(self.height(z.left), self.height(z.right))
+    y.height = 1 + max(self.height(y.left), self.height(y.right))
+    return y
+
+    # left rotation
+    # 1. set x = root.right
+    # 2. set root.right = x.left
+    # 3. set x.left = root
+    # 4. set root = x
+
+    # right rotation
+    # 1. set x = root.left
+    # 2. set root.left = x.right
+    # 3. set x.right = root
+    # 4. set root = x
+
+    #      z                y
+     #     / \              / \
+     #    T1  y      -->   z   T3
+     #   /    \           /     \
+     #  T2     T3        T1     T2
+  def rightrotate(self, z):
+    y = z.left
+    T3 = y.right
+    y.right = z
+    z.left = T3
+    z.height = 1 + max(self.height(z.left), self.height(z.right))
+    y.height = 1 + max(self.height(y.left), self.height(y.right))
+    return y
+
+     #      z                y
+     #     / \              / \
+     #    y   T3    -->    T1  z
+     #   /     \          /     \
+     #  T1     T2        T2     T3
+
+  def insert(self, root, data):
+    if root is None:
+      return Node(data)
+    if root.data > data:
+      root.left = self.insert(root.left, data)
+    else:
+      root.right = self.insert(root.right, data)
+    root.height = 1 + max(self.height(root.left), self.height(root.right))
+    balance = self.getbalance(root)
+    if balance > 1 and data < root.left.data:
+      return self.rightrotate(root)
+    if balance < -1 and data > root.right.data:
+      return self.leftrotate(root)
+    if balance > 1 and data > root.left.data:
+      root.left = self.leftrotate(root.left)
+      return self.rightrotate(root)
+    if balance < -1 and data < root.right.data:
+      root.right = self.rightrotate(root.right)
+      return self.leftrotate(root)
+    return root
+
+  def delete(self, root, data):
+    if root is None:
+      return root
+    if root.data > data:
+      root.left = self.delete(root.left, data)
+    elif root.data < data:
+      root.right = self.delete(root.right, data)
+    else:
+      if root.left is None:
+        temp = root.right
+        root = None
+        return temp
+      elif root.right is None:
+        temp = root.left
+        root = None
+        return temp
+      else:
+        temp = self.getmin(root.right)
+        root.data = temp.data
+        root.right = self.delete(root.right, temp.data)
+    if root is None:
+      return root
+    root.height = 1 + max(self.height(root.left), self.height(root.right))
+    balance = self.getbalance(root)
+    if balance > 1 and self.getbalance(root.left) >= 0:
+      return self.rightrotate(root)
+    if balance < -1 and self.getbalance(root.right) <= 0:
+      return self.leftrotate(root)
+    if balance > 1 and self.getbalance(root.left) < 0:
+      root.left = self.leftrotate(root.left)
+      return self.rightrotate(root)
+    if balance < -1 and self.getbalance(root.right) > 0:
+      root.right = self.rightrotate(root.right)
+      return self.leftrotate(root)
+    return root
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+############################################################################################################## Red Black Tree
+
+# Red Black Tree is a self-balancing Binary Search Tree (BST) where every node follows following rules.
+# 1) Every node has a color either red or black.
+# 2) Root of tree is always black.
+# 3) There are no two adjacent red nodes (A red node cannot have a red parent or red child).
+# 4) Every path from root to a NULL node has same number of black nodes.
+
+# Why Red-Black Trees?
+# Most of the BST operations (e.g., search, max, min, insert, delete.. etc) take O(h) time where h is the height of the BST.
+# The cost of these operations may become O(n) for a skewed Binary tree.
+# If we make sure that height of the tree remains O(Logn) after every insertion and deletion, then we can guarantee an upper bound of O(Logn) for all these operations.
+# The height of a Red Black tree is always O(Logn) where n is the number of nodes in the tree.
+
+# Insertion
+# 1) Perform standard BST insertion and make the color of newly inserted nodes as RED.
+# 2) If x is root, change color of x as BLACK (Black height of complete tree increases by 1).
+# 3) Do following if color of x’s parent is not BLACK or x is not root.
+
+# a) If x’s uncle is RED (Grandparent must have been black from property 4)
+# (i) Change color of parent and uncle as BLACK.
+# (ii) color of grandparent as RED.
+# (iii) Change x = x’s grandparent, repeat steps 2 and 3 for new x.
+
+# b) If x’s uncle is BLACK, then there can be four configurations for x, x’s parent (p) and x’s grandparent (g) (This is similar to AVL Tree)
+# (i) Left Left Case (p is left child of g and x is left child of p)
+# (ii) Left Right Case (p is left child of g and x is right child of p)
+# (iii) Right Right Case (Mirror of case i)
+# (iv) Right Left Case (Mirror of case ii)
+
+# Deletion
+# 1) Perform standard BST delete.
+# 2) Start from the deleted node x and move up until one of the following holds true.
+# ……a) x is new root.
+# ……b) x is BLACK and x’s sibling (w) is RED.
+# 3) If x is root, change color of x as BLACK (Black height of complete tree decreases by 1).
+# 4) If x is BLACK and w is RED, then do following.
+# ……a) Swap color of w and x.
+# ……b) Rotate w to left.
+# ……c) Set w = x’s sibling.
+# 5) If x is BLACK and w is BLACK, then do following.
+# ……a) Set sibling color as RED.
+# ……b) Set x = x’s parent.
+# 6) If x is RED, then set x as BLACK (Black height of tree increases by 1).
+# 7) If x is BLACK and w is BLACK, and x’s sibling is BLACK.
+# ……a) Set sibling color as RED.
+# ……b) Set x = x’s parent.
+# 8) If x is BLACK and w is BLACK, and x’s sibling is RED.
+# ……a) Swap color of parent and sibling.
+# ……b) Rotate parent to right.
+# ……c) Set w = x’s sibling.
+# 9) If x is BLACK and w is BLACK, and x’s sibling w is BLACK, and w’s both children are BLACK.
+# ……a) Set w color as RED.
+# ……b) Set x = x’s parent.
+
+# Time Complexity: The above operations like search, insert and delete take O(Logn) time to execute in a Red-Black tree.
+
+
+class Node:
+  def __init__(self, data):
+    self.data = data
+    self.left = None
+    self.right = None
+    self.color = "RED"
+
+class RedBlackTree:
+
+  def __init__(self):
+    self.root = None
+
+  def insert(self, root, data):
+    if root is None:
+      return Node(data)
+    if root.data > data:
+      root.left = self.insert(root.left, data)
+    elif root.data < data:
+      root.right = self.insert(root.right, data)
+    else:
+      return root
+    if root.left and root.left.color == "RED" and root.right and root.right.color == "RED":
+      root.color = "RED"
+      root.left.color = "BLACK"
+      root.right.color = "BLACK"
+    elif root.left and root.left.color == "RED" and root.left.left and root.left.left.color == "RED":
+      root = self.rightrotate(root)
+      root.color = "BLACK"
+      root.right.color = "RED"
+    elif root.right and root.right.color == "RED" and root.right.right and root.right.right.color == "RED":
+      root = self.leftrotate(root)
+      root.color = "BLACK"
+      root.left.color = "RED"
+    return root
+
+  def delete(self, root, data):
+    if root is None:
+      return root
+    if root.data > data:
+      root.left = self.delete(root.left, data)
+    elif root.data < data:
+      root.right = self.delete(root.right, data)
+    else:
+      if root.left is None or root.right is None:
+        temp = root.left if root.left else root.right
+        if temp is None:
+          root = None
+        else:
+          root = temp
+      else:
+        temp = self.getmin(root.right)
+        root.data = temp.data
+        root.right = self.delete(root.right, temp.data)
+    if root is None:
+      return root
+    if root.left and root.left.color == "RED" and root.right and root.right.color == "RED":
+      root.color = "RED"
+      root.left.color = "BLACK"
+      root.right.color = "BLACK"
+    elif root.left and root.left.color == "RED" and root.left.left and root.left.left.color == "RED":
+      root = self.rightrotate(root)
+      root.color = "BLACK"
+      root.right.color = "RED"
+    elif root.right and root.right.color == "RED" and root.right.right and root.right.right.color == "RED":
+      root = self.leftrotate(root)
+      root.color = "BLACK"
+      root.left.color = "RED"
+    return root
+
+
+  def leftrotate(self, root):
+    temp = root.right
+    root.right = temp.left
+    temp.left = root
+    return temp
+
+  def rightrotate(self, root):
+    temp = root.left
+    root.left = temp.right
+    temp.right = root
+    return temp
+
+  def getmin(self, root):
+    while root.left:
+      root = root.left
+    return root
+
+
+
+
+
+
+
+
+##########################################################################################################    Binary heap
+
+# A Binary Heap is a Binary Tree with following properties.
+
+# 1) It’s a complete tree (All levels are completely filled except possibly the last level and the last level has all keys as left as possible). This property of Binary Heap makes them suitable to be stored in an array.
+# 2) A Binary Heap is either Min Heap or Max Heap. In a Min Binary Heap, the key at root must be minimum among all keys present in Binary Heap. The same property must be recursively true for all nodes in Binary Tree. Max Binary Heap is similar to MinHeap.
+
+# Operations on Min Heap:
+# 1) getMini(): It returns the root element of Min Heap. Time Complexity of this operation is O(1).
+# 2) extractMin(): Removes the minimum element from MinHeap. Time Complexity of this Operation is O(Logn) as this operation needs to maintain the heap property (by calling heapify()) after removing root.
+# 3) decreaseKey(): Decreases value of key. The time complexity of this operation is O(Logn). If the decreases key value of a node is greater than the parent of the node, then we don’t need to do anything.
+# Otherwise, we need to traverse up to fix the violated heap property.
+
+# The root element will be at Arr[0]. Below table shows indexes of other nodes for the ith node, i.e., Arr[i]:
+# Arr[(i-1)/2]	Returns the parent node
+# Arr[(2*i)+1]	Returns the left child node
+# Arr[(2*i)+2]	Returns the right child node
+
+
+
+
+
+def insert(arr, x):
+  arr.append(x)
+  i = len(arr) - 1
+  while i > 0 and arr[i] < arr[(i-1)//2]:
+    arr[i], arr[(i-1)//2] = arr[(i-1)//2], arr[i]
+    i = (i-1)//2
+
+def delete(arr, x):
+  i = arr.index(x)
+  arr[i], arr[-1] = arr[-1], arr[i]
+  arr.pop()
+  heapify(arr, i)
+
+def heapify(arr, i):
+  left = 2*i + 1
+  right = 2*i + 2
+  smallest = i
+  if left < len(arr) and arr[left] < arr[smallest]:     # left < len(arr) is used to check if left child exists or not and arr[left] < arr[smallest] is used to check if left child is smaller than parent or not
+    smallest = left                                     # if left child is smaller than parent then we will store the index of left child in smallest
+  if right < len(arr) and arr[right] < arr[smallest]:
+    smallest = right
+  if smallest != i:                                     # if smallest is not equal to i then we will swap the parent with smallest child because we want smallest element at top
+    arr[i], arr[smallest] = arr[smallest], arr[i]
+    heapify(arr, smallest)
+
+
+def extractmin(arr):
+  if len(arr) == 0:
+    return -1
+  if len(arr) == 1:
+    return arr.pop()
+  root = arr[0]
+  arr[0] = arr[n-1]
+  arr.pop()
+  heapify(arr, 0)
+  return root
+
+
+def decreasekey(arr, i, x):
+  arr[i] = x
+  while i > 0 and arr[i] < arr[(i-1)//2]:
+    arr[i], arr[(i-1)//2] = arr[(i-1)//2], arr[i]
+    i = (i-1)//2
+
+
+def delete(arr, x):
+  n = len(arr)
+  if i >= n:
+    return
+  i = arr.index(x)
+  decreasekey(arr, i, float("-inf"))
+  extractmin(arr)
+
+
+
+
+
+########################################################################------> heap
+
+import math
+class myMinHeap:
+    def __init__(self):
+        self.arr = []  # list to store values of heap items
+
+    def parent(self, i):
+        return (i - 1) // 2
+
+    def lChild(self, i):
+        return 2 * i + 1
+
+    def rChild(self, i):
+        return 2 * i + 2
+
+    def insert(self, x):
+        arr = self.arr
+        arr.append(x)
+        i = len(arr) - 1
+
+        while i > 0 and arr[self.parent(i)] > arr[i]:
+            p = self.parent(i)
+            arr[i], arr[p] = arr[p], arr[i]  # swap with parent
+            i = p
+
+    def minHeapify(self, i):
+        arr = self.arr
+        lt = self.lChild(i)
+        rt = self.rChild(i)
+
+        smallest = i
+        n = len(arr)
+
+        if lt < n and arr[lt] < arr[smallest]:
+            smallest = lt
+        if rt < n and arr[rt] < arr[smallest]:
+            smallest = rt
+
+        if smallest != i:
+            arr[smallest], arr[i] = arr[i], arr[smallest]
+            self.minHeapify(smallest)
+
+    def extractMin(self):
+        arr = self.arr
+        n = len(arr)
+
+        if n == 0:
+            return math.inf
+        res = arr[0]
+
+        arr[0] = arr[n - 1]  # instead of swapping , we assign, bcs we have to pop last
+        arr.pop()
+
+        self.minHeapify(0)
+        return res
+
+    def decreaseKey(self, i, x):
+        arr = self.arr
+        arr[i] = x
+
+        while i != 0 and arr[self.parent(i)] > arr[i]:
+            p = self.parent(i)
+            arr[i], arr[p] = arr[p], arr[i]
+
+            i = p
+
+    def delete(self, i):
+        n = len(self.arr)
+
+        if i >= n:
+            return
+
+        else:
+            self.decreaseKey(i, -math.inf)
+            self.extractMin()
+
+
+
+
+
+######################################################################  Heap Sort
+class solution:
+  def heapify(self, arr, n, i):
+    left = 2*i + 1
+    right = 2*i + 2
+    largest = i
+    if left < n and arr[left] > arr[largest]:
+      largest = left
+    if right < n and arr[right] > arr[largest]:
+      largest = right
+    if largest != i:
+      arr[i], arr[largest] = arr[largest], arr[i]
+      self.heapify(arr, n, largest)
+
+  def buildheap(self, arr, n):
+    for i in range(n//2 - 1, -1, -1):
+      self.heapify(arr, n, i)
+
+  def heapsort(self, arr, n):
+    self.buildheap(arr, n)
+    for i in range(n-1, 0, -1):                    # we are starting from n-1 because we want to swap the largest element with last element and then we will heapify the array from 0 to n-1
+      arr[i], arr[0] = arr[0], arr[i]              # we are swapping the largest element with last element and then we will heapify the array from 0 to n-1 because we want second largest element at top and so on
+      self.heapify(arr, i, 0)                   # we are passing i because we want to heapify the array from 0 to i-1
+    return arr
+
+
+
+
+###############################################################  Heapq or heap queue
+
+# Heap queue (or heapq) in Python is a min-heap implementation for priority queue algorithm.
+# It is used to implement the priority queue data structure in Python. It uses the heapq module, which is part of the Python standard library.
+# The heapq module provides functions for implementing heaps based on regular lists.
+# The lowest valued entry is always kept at position zero.
+# This is useful for applications which repeatedly access the smallest element but do not want to run a full list sort.
+
+# The heap is one maximally efficient implementation of an abstract data type called a priority queue, and in fact, priority queues are often referred to as "heaps", regardless of how they may be implemented.
+# In a heap, the highest (or lowest) priority element is always stored at the root.
+# A heap is not a sorted structure and can be regarded as partially ordered.
+# As visible from the heap-diagram, there is no particular relationship among nodes on any given level, even among the siblings.
+# When a heap is a complete binary tree, it has a smallest possible height—a heap with N nodes and for each node a branches always has loga N height.
+# A heap is a useful data structure when you need to remove the object with the highest (or lowest) priority.
+
+# The heap data structure is used in the following:
+# 1. Heapsort: Heapsort algorithm uses the heap data structure to sort a list in O(nlogn) time.
+# 2. Priority Queue: Priority queues can be efficiently implemented using Binary Heap because it supports insert(), delete() and extractmax(), decreaseKey() operations in O(logn) time.
+# 3. Graph Algorithms: The priority queues are especially used in Graph Algorithms like Dijkstra’s Shortest Path and Prim’s Minimum Spanning Tree.
+
+# The heap data structure can be implemented in the following ways:
+# 1. Using the heapq module in Python
+# 2. Using the queue module in Python
+# 3. Using the priority queue module in Python
+
+# The heapq module in Python
+# The heapq module in Python provides functions for implementing heaps based on regular lists.
+# The lowest valued entry is always kept at position zero.
+# This is useful for applications which repeatedly access the smallest element but do not want to run a full list sort.
+# The heapq module provides the following functions:
+# 1. heapq.heappush(heap, item): Push the value item onto the heap, maintaining the heap invariant.
+import heapq
+li = [5, 7, 9, 1, 3]
+heapq.heapify(li)
+print(li)  # [1, 3, 9, 7, 5]
+# 2. heapq.heappop(heap): Pop and return the smallest item from the heap, maintaining the heap invariant.
+heapq.heappop(li)
+print(li)  # [3, 5, 9, 7]
+# 3. heapq.heappushpop(heap, item): Push item on the heap, then pop and return the smallest item from the heap.
+heapq.heappushpop(li, 2)
+print(li)  # [2, 5, 9, 7]
+# 4. heapq.heapify(x): Transform list x into a heap, in-place, in linear time.
+# example -> [6, 7, 9, 4, 3, 5, 8, 10, 1] -> [1, 3, 5, 4, 6, 9, 8, 10, 7]
+# 5. heapq.heapreplace(heap, item): Pop and return the smallest item from the heap, and also push the new item.
+heapq.heapreplace(li, 2)
+print(li)  # [2, 5, 9, 7]
+# 6. heapq.merge(*iterables): Merge multiple sorted inputs into a single sorted output (for example, merge timestamped entries from multiple log files).
+# Returns an iterator over the sorted values.
+# Similar to sorted(itertools.chain(*iterables)) but returns an iterable, does not pull the data into memory all at once, and assumes that each of the input streams is already sorted (smallest to largest).
+-> heapq.merge([1, 3, 5], [2, 4, 6])
+-> [1, 2, 3, 4, 5, 6]
+
+# 7. heapq.nlargest(n, iterable[, key]): Return a list with the n largest elements from the dataset defined by iterable.
+heapq.nlargest(3, li)
+# output -> [9, 7, 5] largest 3 elements
+# 8. heapq.nsmallest(n, iterable[, key]): Return a list with the n smallest elements from the dataset defined by iterable.
+heapq.nsmallest(3, li)
+# output -> [2, 5, 7] smallest 3 elements
+# 9. heapq._heapify_max(x): Transform list x into a maxheap, in-place, in linear time.
+# example -> [6, 7, 9, 4, 3, 5, 8, 10, 1] -> [10, 7, 9, 4, 6, 5, 8, 10, 1]
+# 10. heapq._heappop_max(heap): Pop and return the largest item from the heap, maintaining the heap invariant.
+heapq._heappop_max(li)
+print(li)  # [9, 5, 8, 7] -> 10 is popped
+# 11. heapq._heapreplace_max(heap, item): Pop and return the current largest value, and add the new item.
+heapq._heapreplace_max(li, 2)
+print(li)  # [9, 5, 8, 7] -> 10 is replaced by 2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+############################################# Problems
+
+# 1. Heap Sort
+
+def heapsort(arr, n):
+  for i in range(n//2 - 1, -1, -1):
+    heapify(arr, n, i)
+  for i in range(n-1, 0, -1):
+    arr[i], arr[0] = arr[0], arr[i]
+    heapify(arr, i, 0)
+    return arr
+
+def heapify(arr, n, i):
+  left = 2*i+ 1
+  right = 2*i+2
+  largest = i
+  if left < n and arr[left] > arr[largest]:
+    largest = left
+  if right < n and arr[right] > arr[largest]:
+    largest = right
+  if largest != i:
+    arr[i], arr[largest] = arr[largest], arr[i]
+    heapify(arr, n, largest)
+
+arr = [5, 7, 9, 1, 3]
+n = len(arr)
+print(heapsort(arr, n))
+# Time Complexity: Time complexity of heapify is O(Logn).
+# outpout -> [1, 3, 5, 7, 9]
+
+
+
+
+
+
+# 2. Kth largest element in a stream
+# Given an input stream arr[] of n integers.
+# Find the Kth largest element for each element in the stream and if the Kth element doesn't exist, return -1.
+
+# Example:
+# Input:
+# k = 4, n = 6
+# arr[] = {1, 2, 3, 4, 5, 6}
+# Output:
+# -1 -1 -1 1 2 3
+
+def buildheap(arr, n):
+  for i in range(n//2 - 1, -1, -1):
+    heapify(arr, n, i)
+
+def heapify(arr, n, i):
+  left = 2*i + 1
+  right = 2*i + 2
+  largest = i
+  if left < n and arr[left] > arr[largest]:
+    largest = left
+  if right < n and arr[right] > arr[largest]:
+    largest = right
+  if largest != i:
+    arr[i], arr[largest] = arr[largest], arr[i]
+    heapify(arr, n, largest)
+
+
+def kthlargest(arr, n, k):                        # arr = [6, 12, 2, 4, 8, 10]  -> k = 4, n = 6
+  if k <= 0 or k > n:                             # buildheap(arr, n) -> [12, 8, 10, 4, 6, 2]
+    return -1                                     # 1st iteration -> arr[0], arr[6-1] = arr[6-1], arr[0] -> [2, 8, 10, 4, 6, 12] -> heapify(arr, n-i, 0) -> [10, 8, 2, 4, 6, 12]
+  buildheap(arr, n)                               # 2nd iteration -> arr[0], arr[6-2] = arr[6-2], arr[0] -> [6, 8, 2, 4, 10, 12] -> heapify(arr, n-i, 0) -> [8, 6, 2, 4, 10, 12]
+  for i in range(1, k):                           # 3rd iteration -> arr[0], arr[6-3] = arr[6-3], arr[0] -> [4, 6, 2, 8, 10, 12] -> heapify(arr, n-i, 0) -> [6, 4, 2, 8, 10, 12]
+    arr[0], arr[n-i] = arr[n-i], arr[0]           # loop ends here because k = 4 and i = 3 -> return arr[0] -> 6
+    heapify(arr, n-i, 0)
+  return arr[0]
+
+arr = [6, 12, 2, 4, 8, 10]
+n = len(arr)
+k = 4
+print(kthlargest(arr, n, k))
+
+
+
+
+
+
+
+
+
+
+
+
+
+# median in a stream of running integers
+
+# Given that integers are read from a data stream. Find median of elements read so for in efficient way.
+# For simplicity assume there are no duplicates. For example, let us consider the stream 5, 15, 1, 3 …
+# After reading 1st element of stream - 5 -> median - 5
+# After reading 2nd element of stream - 5, 15 -> median - 10
+# After reading 3rd element of stream - 5, 15, 1 -> median - 5
+
+
+# 1. Naive Approach: The idea is to use an array to store every element read from the stream, and then after reading each element print the median of the array. Time Complexity: O(n^2)
+
+def printMedian(arr, n):
+  sorted(arr)
+  if n % 2 == 0:
+    print((arr[n//2] + arr[n//2 - 1]) // 2)
+  else:
+    print(arr[n//2])
+
+# 2. Using Insertion Sort: The idea is to use Insertion Sort. Time Complexity: O(n^2)
+
+def printMedian(arr, n):
+   for i in range(n):
+     insertionSort(arr, i+1)
+     if i % 2 == 0:
+       print(arr[i//2])
+     else:
+       print((arr[i//2] + arr[i//2 + 1]) // 2)
+
+def insertionSort(arr, n):
+  for i in range(1, n):
+    element = arr[i]
+    j = i - 1
+    while j >= 0 and arr[j] > element:    # if element is smaller than arr[j], move arr[j] to right and j to left  if element is greater than arr[j] arr[j+1] is same position of element
+      arr[j+1] = arr[j]
+      j -= 1
+    arr[j+1] = element                    # this is the right position for element [its same as i]
+    return arr
+
+
+
+
+# 3. Using Self Balancing BST: The idea is to use Self-Balancing BST like AVL or Red Black tree to implement the above task. Every node of BST will contain number of nodes in left and right subtrees. Time Complexity: O(nLogn)
+
+class Node:
+  def __init__(self, data):
+    self.data = data
+    self.left = None
+    self.right = None
+    self.count = 0
+
+  def insert(root, data):
+    if root == None:
+      return Node(data)
+    if root.data >= data:
+      root.left = insert(root.left, data)
+    else:
+      root.right = insert(root.right, data)
+    root.count += 1
+    return root
+
+  def getMedian(root):
+    if root == None:
+      return None
+    count = root.count
+    curr = root
+    while curr.left != None:
+      curr = curr.left
+    for i in range((count-1)//2):
+      curr = curr.right
+    if count % 2 == 0:
+      return (curr.data + curr.right.data) // 2
+    else:
+      return curr.data
+
+
+
+# 4. Using Heaps: The idea is to use Min Heap and Max Heap to implement the above task. Min Heap will contain all elements greater than effective median and max heap will contain all elements smaller than effective median. Time Complexity: O(nLogn)
+
+import heapq
+
+def printMedian(arr):
+    s = []  # max heap to store the smaller half elements
+    g = []  # min heap to store the greater half elements
+    med = arr[0]
+    heapq.heappush(s, -arr[0])
+    print(med)
+
+    for i in range(1, len(arr)):
+        x = arr[i]
+
+        # case1(left side heap has more elements)
+        if len(s) > len(g):
+            if x < med:
+                heapq.heappush(g, -heapq.heappop(s))
+                heapq.heappush(s, -x)
+            else:
+                heapq.heappush(g, x)
+
+            med = (s[0] - g[0]) / 2.0
+
+        # case2(both heaps are balanced)
+        elif len(s) == len(g):
+            if x < med:
+                heapq.heappush(s, -x)
+                med = -s[0]
+            else:
+                heapq.heappush(g, x)
+                med = g[0]
+
+        # case3(right side heap has more elements)
+        else:
+            if x > med:
+                heapq.heappush(s, -heapq.heappop(g))
+                heapq.heappush(g, x)
+            else:
+                heapq.heappush(s, -x)
+
+            med = (s[0] - g[0]) / 2.0
+
+        print(med)
+
+# Example Usage:
+stream = [5, 2, 7, 3, 8]
+printMedian(stream)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+def heapify(arr, n, i):
+  left = i
+  right = i
+  largest = i
+
+  if left < n and arr[left] > arr[largest]:
+    largest = left
+
+  if right < n and arr[right] > arr[largest]:
+    largest = right
+
+  if largest != i:
+    arr[i], arr[largest] = arr[largest], arr[i]
+    heapify(arr, n, largest)
+
+def buildheap(arr, n):
+  for i in range(n//2, -1, -1):
+    heapify(arr, n, i)
+
+def insert(arr, k):
+  siz = len(arr)
+  if siz == 0:
+    arr.append(k)
+  else:
+    arr.append(k)
+    for i in range((siz//2)-1, -1, -1):   # it will heapify the array from bottom to top [from last parent to first parent] leaving the leaf nodes
+      heapify(arr, siz, i)
+
+def delete(arr, k):
+  siz = len(arr)
+  for i in range(siz):
+    if arr[i] == k:
+      break
+  arr[i], arr[siz-1] = arr[siz-1], arr[i]
+  arr.pop()
+  for i in range((siz//2)-1, -1, -1):
+    heapify(arr, siz, i)
+
+def getMedian(arr):
+  siz = len(arr)
+  if siz % 2 == 0:
+    return (arr[siz//2] + arr[(siz//2)-1]) // 2
+  else:
+    return arr[siz//2]
+
+def printMedian(arr):
+  buildheap(arr, len(arr))
+  for i in range(len(arr)):
+    insert(arr[:i], arr[i])  # it will insert the element in the heap and heapify the array from bottom to top [from last parent to first parent] leaving the leaf nodes
+    print(getMedian(arr[:i+1])) # it will print the median of the array from 0 to i
+    delete(arr[:i+1], arr[i])  # it will delete the element from the heap and heapify the array from bottom to top [from last parent to first parent] leaving the leaf nodes
+
+
+arr = [5, 2, 7, 3, 8]
+printMedian(arr)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#################################################################################################### Bitwise operation in python ####################################################################################################
+
+# operators are used to perform operation on values and variables
+
+# 1. Bitwise AND: &    -> a = 10(1010), b = 4(0100) -> a & b = 0(0000)
+# 2. Bitwise OR: |     -> a = 10(1010), b = 4(0100) -> a | b = 14(1110)
+# 3. Bitwise XOR: ^    -> a = 10(1010), b = 4(0100) -> a ^ b = 14(1110)
+# 4. Bitwise NOT: ~    -> a = 10(1010) -> ~a = -11(-1011)
+# 5. Left Shift: <<    -> a = 10(1010) -> a << 2 = 40(101000)
+# 6. Right Shift: >>   -> a = 10(1010) -> a >> 2 = 2(0010)
+# 7. Zero fill right shift: >>> -> a = 10(1010) -> a >>> 2 = 2(0010)
+
+
+
+
+
+# Problem:
+# find first set bit in a number
+
+# Solution:
+# 1. Naive approach: O(logn)
+def firstSetBit(n):
+  if n == 0:
+    return 0
+  pos = 1
+  while n:
+    if n & 1 == 1:
+      return pos
+    pos += 1
+    n = n >> 1
+  return 0
+
+# 2. Efficient approach: O(1)
+def firstSetBit(n):
+  if n == 0:
+    return 0
+  return int(math.log2(n & -n) + 1)
+# n & -n will give the rightmost set bit and math.log2 will give the position of that set bit and we will add 1 to it to get the position of that set bit
+# and int will convert the float value to int value
+
+# 3. Efficient approach: O(1)
+def firstSetBit(n):
+  if n == 0:
+    return 0
+  return int(math.log2(n & ~(n-1)) + 1)
+
+
+# problem
+
+# rightmost different bit
+
+# solution
+
+def rightmostDifferentBit(m, n):
+  if m == n:
+    return -1
+  pos = 1
+  while m and n:
+    if m & 1 != n & 1:
+      return pos
+    pos += 1
+    m = m >> 1
+    n = n >> 1
+  return pos
+
+def rightmostDifferentBit(m, n):
+  if m == n:
+    return -1
+  return int(math.log2((m ^ n) & -(m ^ n)) + 1)
+
+
+
+
+# problem
+
+# check if kth bit is set or not in a number
+# steps:
+# 1. left shift 1 by k-1
+# 2. and it with n
+# 3. if it is equal to 0 then kth bit is not set else it is set
+
+# example
+# n = 5(0101)
+# k = 3
+# 1 << k-1 = 1 << 2 = 4(0100)
+# n & 4 = 0101 & 0100 = 0100 = 4
+# 4 != 0
+# so kth bit is set
+# naive approach
+def kthbitset(n, k):
+  return n & (1 << k-1) != 0
+
+# another approach
+
+def kthbitset(n, k):
+  if ((n >> (k-1)) & 1) == 1:
+    return True
+  return False
+
+
+
+
+
+
+# problem
+
+# count set bits in a number
+
+# explanation:
+# 1. right shift the number by 1 and check if it is equal to 1 or not
+# 2. if it is equal to 1 then increment the count
+# 3. do this until n becomes 0
+
+# example
+# n = 5(0101)
+# count = 0
+# n = 0101
+# n = 0101 >> 1 = 0010
+# n = 0010 >> 1 = 0001
+# n = 0001 >> 1 = 0000
+# n = 0000 >> 1 = 0000
+# count = 3
+
+
+
+# solution
+
+# naive approach
+
+def countSetBits(n):
+  count = 0
+  while n:
+    if n % 2 == 1:
+      count += 1
+    n = n // 2
+  return count
+
+def countSetBits(n):
+  count = 0
+  while n:
+    if n & 1 == 1:
+      count += 1
+    n = n >> 1
+  return count
+
+# efficient approach
+
+# 1. Brian Kernighan’s Algorithm: O(logn)
+def countSetBits(n):
+  count = 0
+  while n:
+    n = n & (n-1)
+    count += 1
+  return count
+
+# explanation:
+# 1. subtract 1 from n
+# 2. "And" it with n and store it in n
+# 3. do this until n becomes 0
+# 4. count the number of times we are doing this
+
+# example
+# n = 5(0101)
+# count = 0
+# n = 0101
+# n = 0101 - 1 = 0100
+# n = 0101 & 0100 = 0100
+# n = 0100 - 1 = 0011
+# n = 0100 & 0011 = 0000
+# count = 2
+
+
+
+# 2. Lookup table method: O(1)
+
+def initialize():
+  table = [0] * 256
+  for i in range(256):
+    table[i] = (i & 1) + table[i//2]
+  return table
+
+def countSetBits(n):
+  table = initialize()
+  count = 0
+  while n:
+    count += table[n & 0xff]
+    n = n >> 8
+  return count
+
+# explanation:
+# 1. create a lookup table of size 256
+# 2. initialize the table with 0 and 1
+# 3. for i in range(256):
+# 4. table[i] = (i & 1) + table[i//2]
+# 5. return table
+# 6. now in countSetBits function
+# 7. initialize the table
+# 8. count = 0
+# 9. while n:
+# 10. count += table[n & 0xff] means count += table[0101 & 11111111] = count += table[0101] = count += 2
+# 11. n = n >> 8 = 0000
+# 12. count = 2
+
+def countsetbits(n):
+  count = 0                       # ignoring 0 as it has no set bits
+  n += 1                          # incrementing n by 1 as we are ignoring 0 to make it inclusive of 0
+  x = 2                           # x is the power of 2
+  while x//2 < n:                 # counting set bit from 1 to n
+    quotient = n//x               # Total count of pairs of 0s and 1s
+    count += quotient * x//2      # adding count of set bits in every pair
+    remainder = n % x             # count of set bits in the remainder part
+    if remainder > x//2:          # if remainder has more than x/2 set bits
+      count += remainder - x//2   # add the set bits after x/2
+    x = x * 2                     # incrementing x by 2
+  return count
+
+
+
+# problem
+
+# Bit Difference
+
+# explanation:
+# 1. take xor of m and n
+# 2. count the number of set bits in xor
+
+# example
+# m = 10(1010)
+# n = 15(1111)
+# xor = 1010 ^ 1111 = 0101
+# count = 2
+
+# solution
+
+# naive approach
+
+def countBitsflip(a, b):
+  count  = 0
+  xor = a ^ b
+  while xor:
+    if xor & 1 == 1:
+      count += 1
+    xor = xor >> 1
+  return count
+
+# efficient approach
+
+def countBitsflip(a, b):
+  count = 0
+  xor = a ^ b
+  while xor:
+    xor = xor & (xor-1)
+    count += 1
+  return count
+
+
+
+
+# problem
+
+# Longest Consecutive 1's
+
+# explanation:
+# 1. take xor of m and n
+# 2. count the number of set bits in xor
+
+# example
+# n = 14(1110)
+# count = 3
+
+# solution
+
+def maxConsecutiveOnes(n):
+  count = 0                              # to store the count of set bits
+  while n:                               # while n is not equal to 0
+    n = n & (n << 1)                     # left shift n by 1 and "and" it with n and store it in n to remove the trailing 1 from n
+    count += 1                           # increment the count
+  return count                           # return the count
+
+
+
+# problem
+# find the only odd occuring number in an array
+
+# explanation:
+# 1. take xor of all the elements in the array
+# 2. return the xor
+
+# naive approach
+def oddOccuring(arr):
+  for i in range(len(arr)):
+    count = 0
+    for j in range(len(arr)):
+      if arr[i] == arr[j]:
+        count += 1
+    if count % 2 != 0:
+      return arr[i]
+
+# efficient approach
+
+def oddOccuring(arr):
+  res = 0
+  for i in range(len(arr)):
+    res = res ^ arr[i]
+  return res
+
+
+# problem
+# Power of 2
+
+# explanation:
+# 1. check if n is equal to 0 or not
+# 2. if n is equal to 0 then return False
+# 3. else take the xor of n and n-1
+# 4. if xor is equal to 0 then return True
+# 5. else return False
+
+
+
+
+def isPowerofTwo(n):
+  if n == 0:
+    return False
+  while n != 1:
+    if n % 2 != 0:
+      return False
+    n = n // 2
+  return True
+
+# efficient approach
+
+def isPowerofTwo(n):
+  if n == 0:
+    return False
+  else:
+    xor = n ^ (n-1)
+    if xor == 0:
+      return True
+    else:
+      return False
+
+# efficient method
+
+def isPowerofTwo(n):
+  if n == 0:
+    return False
+  else:
+    return n & (n-1) == 0
+
+
+
+
+# problem
+# find the odd occuring number in an array
+
+# naive approach
+
+def oddOccuring(arr):
+  for i in range(len(arr)):
+    count = 0
+    for j in range(len(arr)):
+      if arr[i] == arr[j]:
+        count += 1
+    if count % 2 != 0:
+      return arr[i]
+
+# efficient approach
+# xor of two same numbers is 0 so we can take xor of all the elements in the array and return the xor
+
+def oddOccuring(arr):
+  res = 0
+  for i in range(len(arr)):
+    res = res ^ arr[i]
+  return res
+
+
+# problem
+# find the two odd occuring numbers in an array
+
+# naive approach
+
+def oddOccuring(arr):
+  for i in range(len(arr)):
+    count = 0
+    for j in range(len(arr)):
+      if arr[i] == arr[j]:
+        count += 1
+    if count % 2 != 0:
+      print(arr[i], end = " ")
+
+# efficient approach
+# xor of two same numbers is 0 so we can take xor of all the elements in the array and return the xor
+# now we have to find the rightmost set bit in the xor -> rsb = xor & ~(xor-1)
+# now we will divide the array into two parts -> one with the set bit at rsb and other with the unset bit at rsb
+# now we will take xor of all the elements in the first part and second part and return the xor
+
+def oddOccuring(arr):
+  xor = 0
+  res1 = 0
+  res2 = 0
+  for i in range(len(arr)):
+    xor = xor ^ arr[i]
+
+  rsb = xor & ~(xor-1)        # rightmost set bit -> we will check the rightmost set bit in the xor and store it in rsb if it is 1 and store 0 if it is 0
+
+  for i in range(len(arr)):   # dividing the array into two parts -> one group with set bit at rsb last bit is 1 and other group with unset bit at rsb last bit is 0
+    if arr[i] & rsb != 0:     # if the element has set bit at rsb then we will take xor of all the elements in the first part
+      res1 = res1 ^ arr[i]
+    else:                     # if the element has unset bit at rsb then we will take xor of all the elements in the second part
+      res2 = res2 ^ arr[i]
+  print(res1, res2)
+
+
+# problem
+# power set of a string
+
+# explanation:
+# 1. take the length of the string
+# 2. take the power of 2 of the length of the string
+# 3. run a loop from 0 to 2^len(s)
+# 4. run a loop from 0 to len(s)
+# 5. if i & (1<<j) != 0 then print s[j]
+
+# example
+# s = "abc"
+# len(s) = 3
+# 2^len(s) = 8
+# 0 0 0 -> ""
+# 0 0 1 -> "c"
+# 0 1 0 -> "b"
+# 0 1 1 -> "bc"
+# 1 0 0 -> "a"
+# 1 0 1 -> "ac"
+#...
+
+# solution
+
+def powerSet(s):                                                            # s = "abc" , len(s) = 3 , powSize = 2^3 = 8
+  n = len(s)                                                                # 1 loop -> i = 0 -> 0 0 0 -> "" , i = 1 -> 0 0 1 -> "c" , i = 2 -> 0 1 0 -> "b" , i = 3 -> 0 1 1 -> "bc" ,
+  powSize = 1 << n # or pow(2, n) -> 2^n                                    # i = 4 -> 1 0 0 -> "a" , i = 5 -> 1 0 1 -> "ac" , i = 6 -> 1 1 0 -> "ab" , i = 7 -> 1 1 1 -> "abc"
+  for i in range(powSize):                                                  # 2 loop -> j = 0 -> 0 & (1<<0) -> 0 != 0 -> print s[0] -> print "a" , j = 1 -> 0 & (1<<1) -> 0 != 0 -> print s[1] -> print "b"
+    for j in range(n):                                                      # j = 2 -> 0 & (1<<2) -> 0 != 0 -> print s[2] -> print "c"
+      if i & (1<<j) != 0:                                                   # loop continues till j = 2
+        print(s[j], end = "")
+    print()
+
+
+
+# problem
+# gray to binary equivalent
+
+# explanation:
+# 1. take the gray code
+# 2. take the binary equivalent of the gray code
+# 3. take the xor of the gray code and the binary equivalent of the gray code
+# 4. return the xor
+
+# approach
+
+def grayToBinary(n):
+  res = n
+  while n != 0:
+    n = n >> 1
+    res = res ^ n
+  return res
 
 
