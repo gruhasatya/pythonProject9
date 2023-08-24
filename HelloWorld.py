@@ -7536,3 +7536,557 @@ def grayToBinary(n):
   return res
 
 
+def binaryToGray(n):
+  return n ^ (n >> 1)
+
+
+
+# problem
+# Number is sparse or not
+
+# explanation:
+# 1. take the number
+# 2. take the right shift of the number
+# 3. take the xor of the number and the right shift of the number
+# 4. if the xor is 0 then return True else return False
+
+# approach
+
+def isSparse(n):                         # n = 4
+  return n & (n >> 1) == 0               # 4 & (4 >> 1) -> 4 & 2 -> 0 == 0 -> True
+                                         # 4 -> 100 , 4 >> 1 -> 010 , 100 & 010 -> 000 -> 0 == 0 -> True
+
+def isSparse(n):
+  rsb = n & ~(n-1)                       # 4 & ~(4-1) -> 4 & ~(3) -> 4 & (-4) -> 4 & 4 -> 4 -> 100
+  return rsb == n                        # 100 == 100 -> True
+
+
+
+
+# problem
+# Swap all odd and even bits
+
+# explanation:
+# 1. take the number
+# 2. take the even bits of the number
+# 3. take the odd bits of the number
+# 4. take the left shift of the even bits
+# 5. take the right shift of the odd bits
+# 6. take the xor of the even bits and the odd bits
+# 7. return the xor
+
+# approach
+
+def swapBits(n):
+  even_bits = n & 0xAAAAAAAA
+  odd_bits = n & 0x55555555
+  even_bits = even_bits >> 1
+  odd_bits = odd_bits << 1
+  return even_bits ^ odd_bits
+# 0xAAAAAAAA -> 10101010101010101010101010101010
+# 0x55555555 -> 01010101010101010101010101010101
+# 0xAAAAAAAA & 0x55555555 -> 10101010101010101010101010101010 & 01010101010101010101010101010101 -> 0000000000000
+# 0xAAAAAAAA >> 1 -> 10101010101010101010101010101010 >> 1 -> 01010101010101010101010101010101
+# 0x55555555 << 1 -> 01010101010101010101010101010101 << 1 -> 10101010101010101010101010101010
+# 01010101010101010101010101010101 ^ 10101010101010101010101010101010 -> 1111111
+# 1111111 -> 127
+
+
+
+
+
+
+
+# problem
+# Maximum and Value      - ---- --- ---- ---- ---- Medium
+
+
+# approach
+def maxAND(arr, n):
+  res = 0
+  for i in range(0, n):
+    for j in range(i+1, n):
+      res = max(res, arr[i] & arr[j])
+  return res
+
+
+# Efficient approach
+
+# Most significant bit means the left most bit which is 1 in the binary representation of the number.
+# you start from MSB to LSB to get maximum AND value. To get minimum AND value, you start from LSB to MSB.
+# AND - > 1 1 -> 1 , 1 0 -> 0 , 0 1 -> 0 , 0 0 -> 0
+# 4 -> 100, 8 -> 1000, 12 -> 1100, 16 -> 10000
+# 1 << 4 = 2^4 = 16 -> 10000
+
+# 8 & 12 -> 1000 & 1100 = 1000 -> Output is 8.
+
+def maxAND(arr, n):
+  res = 0
+  for bit in range(int(math.log2(max(arr))), -1, -1):  # max(arr) -> 16 -> 10000 -> log2(16) -> 4 -> 3 -> 2 -> 1 -> 0
+    count = 0
+    temp = (1 << bit) | res
+    for e in arr:
+      if e & temp == temp:
+        count += 1
+    if count >= 2:                                    # count should be greater than or equal to 2 because we need to find the maximum AND value of two numbers in the array
+      res = temp
+  return res
+
+
+# Explanation:
+
+# res = 0
+# bit = 4, temp = 1 << 4 | 0 -> 10000 | 0 -> 10000 -> 16
+# rest all are False
+# e = 16, 16 & 16 == 16 -> 10000 & 10000 = 10000 == 10000 -> True -> count = 1
+# count >= 2 -> False
+
+# now bit = 3, temp = 1 << 3 | 0 -> 1000 | 0 -> 1000 -> 8
+# count = 0
+# e = 4, 4 & 8 == 8 -> 100 & 1000 = 0 != 1000 -> False
+# e = 8, 8 & 8 == 8 -> 1000 & 1000 = 1000 == 1000 -> True -> count = 1
+# e = 12, 12 & 8 == 8 -> 1100 & 1000 = 1000 == 1000 -> True -> count = 2
+# e = 16, 16 & 8 == 8 -> 10000 & 1000 = 0 != 1000 -> False
+# count >= 2 -> True -> res = 8
+
+# now bit = 2, temp = 1 << 2 | 8 -> 100 | 1000 = 1100 -> 12
+# e = 12, 12 & 12 == 12 -> 1100 & 1100 = 1100 == 1100 -> True -> count = 1
+# rest all are False
+
+# now bit = 1, temp = 1 << 1 | 12 -> 10 | 1100 = 1110 -> 14
+# All are False
+
+# now bit = 0, temp = 1 << 0 | 14 -> 1 | 1110 = 1111 -> 15
+# All are False
+
+# return res -> 8
+
+
+
+
+
+
+
+
+
+# left Rotate by D places
+
+# using list
+
+l = [1, 2, 3, 4, 5]
+d = 2
+l = l[d:] + l[:d]
+print(l)  # [3, 4, 5, 1, 2]
+
+# using deque
+from collections import deque
+
+l = [1, 2, 3, 4, 5]
+d = 2
+dq = deque(l)
+dq.rotate(-d)
+l = list(dq)
+print(l)  # [3, 4, 5, 1, 2]
+
+
+# Approach
+
+
+def leftRotate(arr, d, n):
+  temp = []
+  for i in range(d, n):
+    temp.append(arr[i])
+  for i in range(d):
+    temp.append(arr[i])
+  return temp
+
+# ------------------------------
+
+def leftRotate(arr, d):
+  for i in range(0, d):
+    arr.append(arr.pop(0)) # first element is popped and appended to the end of the list
+
+
+# method 3
+
+def leftRotate(arr, d):
+  n = len(arr)
+  reverse(arr, 0, d-1)
+  reverse(arr, d, n-1)
+  reverse(arr, 0, n-1)
+
+def reverse(arr, start, end):
+  while start < end:
+    arr[start], arr[end] = arr[end], arr[start]
+    start += 1
+    end -= 1
+
+
+
+# problem
+
+# Check if array is sorted and rotated     - ---- --- ---- ---- ---- Medium
+
+# approach
+
+# 1 2 3  -> ouptut -> False
+# 3 1 2  -> ouptut -> True
+
+# if array is sorted and rotated then there will be only one element which will be smaller than its previous element
+# if there are more than one element which is smaller than its previous element then array is not sorted and rotated
+
+def checkRotatedAndSorted(arr, n):   # This approach will not work for duplicate elements or it will work just to find sort not sorted and rotated
+  count = 0
+  for i in range(n):
+    if arr[i] < arr[i - 1]:
+      count += 1
+  if count > 1:
+    return False
+  return True
+
+#  ------------------------------
+
+def checkRotatedAndSorted(arr, n):
+  x = 0
+  y = 0
+  for i in range(n-1):
+    if arr[i] < arr[i+1]:
+      x += 1
+    else:
+      y += 1
+
+  if y == 1:
+    if arr[n-1] < arr[0]:
+      x += 1
+    else:
+      y += 1
+
+    if y == 1:
+      return True
+  return False
+
+
+# --------------------------------------------
+
+def checkRotatedAndSorted(arr, n):
+  x = 0
+  y = 0
+  for i in range(n-1):
+    if arr[i] < arr[i+1]:
+      x += 1
+    else:
+      y += 1
+
+  if y == 1 and arr[n-1] < arr[0]:
+    return True
+  if x == 1 and arr[n-1] > arr[0]:
+    return True
+  return False
+
+
+
+
+
+# Problem
+
+# Maximum Difference
+
+# Naive Approach
+def maxdiff(arr, n):
+  res = arr[1] - arr[0]
+  for i in range(0, n-1):
+    for j in range(i+1, n):
+      res = max(res, arr[j] - arr[i])
+  return res
+
+
+
+# Efficient Approach
+
+def maxdiff(arr, n):
+  res = arr[1] - arr[0]
+  min = arr[0]
+  for i in range(1, n):
+    res = max(res, arr[j] - min)
+    min = min(arr[j], min)
+  return res
+
+# example
+
+# arr = [2, 3, 10, 6, 4, 8, 1]
+# res = 1
+# min = 2
+# i = 1, res = max(1, 3 - 2) = 1, min = min(3, 2) = 2
+# i = 2, res = max(1, 10 - 2) = 8, min = min(10, 2) = 2
+# i = 3, res = max(8, 6 - 2) = 8, min = min(6, 2) = 2
+# i = 4, res = max(8, 4 - 2) = 8, min = min(4, 2) = 2
+# i = 5, res = max(8, 8 - 2) = 8, min = min(8, 2) = 2
+# i = 6, res = max(8, 1 - 2) = 8, min = min(1, 2) = 1
+# return res -> 8
+
+
+# problem
+
+def maxIndexDiff(A, N):
+  left = [0] * N
+  right = [0] * N
+  left[0] = A[0]
+  right[N-1] = A[N-1]
+  for i in range(1, N):
+    left[i] = min(A[i], left[i-1])
+  for i in range(N-2, -1, -1):
+    right[i] = max(A[i], right[i+1])
+  i = 0
+  j = 0
+  maxDiff = -1
+  while i < N and j < N:
+    if left[i] <= right[j]:
+      maxDiff = max(maxDiff, j-i)
+      j += 1
+    else:
+      i += 1
+  return maxDiff
+
+
+
+
+
+
+
+
+
+
+
+# problem
+
+# Stock buy and sell
+
+# explanation:
+# 1. take the array and the length of the array
+# 2. take the profit as 0
+# 3. run a loop from 1 to n and check if the element is greater than the previous element
+# 4. if it is greater than the previous element then add the difference of the element and the previous element to the profit
+# 5. return the profit
+
+
+# logic
+
+# 100 ,180 ,260 ,310 ,40 ,535 ,695
+# Buy on day 1, sell on day 4. profit = 310-100 = 210
+# or Buy on day 1, sell on day 2, buy on day 3 and sell on day 4. profit = 210
+# By this we can see that we can buy and sell the stock multiple times to maximize the profit
+
+# Efficient approach
+
+def stockBuySell(arr, n):
+  profit = 0
+  for i in range(1, n):
+    if arr[i] > arr[i-1]:      # it means if price is greater than the previous day then we will buy the stock and sell it on the next day
+      profit += arr[i] - arr[i-1]
+  return profit
+
+# Another approach
+
+def maxProfit(arr,s, e):
+  if e <= s:
+    return 0
+  profit = 0
+  for i in range(s, e):
+    for j in range(i+1, e+1):
+      if arr[j] > arr[i]:
+        curr_profit = arr[j] - arr[i] + maxProfit(arr, s, i - 1) + maxProfit(arr, j + 1, e)
+        profit = max(profit, curr_profit)
+  return profit
+
+# Another approach
+
+def stockBuySell(arr, n):
+  result = []
+  i = 0
+  while i < n-1:
+    while i < n-1 and arr[i+1] <= arr[i]:
+      i += 1
+    if i == n-1:
+      break
+    buy = i
+    i += 1
+    while i < n and arr[i] >= arr[i-1]:
+      i += 1
+    sell = i-1
+    result.append([buy, sell])
+  return result
+
+arr = [100, 180, 260, 310, 40, 535, 695]
+print(stockBuySell(arr, len(arr)))
+
+
+
+
+
+
+
+
+
+# problem
+
+# Trapping Rain Water
+
+# Traverse the array and find the maximum height of bar from left and right side.
+# take the minimum of the two heights.
+# the difference between the minimum height and the height of the current element will give the water stored at that index.
+# sum up the water stored at each index.
+
+def maxWater(arr, n):
+  sum = 0
+  for i in range(1, n-1):
+    left = arr[i]
+    for j in range(i):
+      left = max(left, arr[j])
+
+    right = arr[i]
+    for j in range(i+1, n):
+      right = max(right, arr[j])
+
+    sum += min(left, right) - arr[i]
+  return sum
+
+
+
+
+# -------------------
+
+def maxWater(arr, n):
+  left = [0] * n
+  right = [0] * n
+  water = 0
+  left[0] = arr[0]
+  for i in range(1, n):
+    left[i] = max(left[i-1], arr[i])
+
+  right[n-1] = arr[n-1]
+  for i in range(n-2, -1, -1):
+    right[i] = max(right[i+1], arr[i])
+
+  for i in range(n):
+    water += min(left[i], right[i]) - arr[i]
+
+  return water
+
+
+
+
+#  Problem
+
+# Maximum subarray of sum
+
+# naive approach
+
+def maxSum(arr, n):
+  res = arr[0]
+  for i in range(0, n):
+    curr = 0
+    for j in range(i, n):
+      curr += arr[j]
+      res = max(res, curr)
+  return res
+
+
+# explanation for efficient approach
+
+# 1. take the array and the length of the array
+# 2. take the max_so_far as 0 and max_ending_here as 0
+# 3. run a loop from 0 to n
+# 4. add the element to max_ending_here
+# 5. if max_ending_here is less than 0 then make it 0
+# 6. if max_so_far is less than max_ending_here then make max_so_far equal to max_ending_here
+# 7. return max_so_far
+
+def maxSum(arr, n):
+  max_so_far = 0
+  max_ending_here = 0
+  for i in range(0, n):
+    max_ending_here += arr[i]
+    if max_ending_here < 0:
+      max_ending_here = 0
+    if max_so_far < max_ending_here:
+      max_so_far = max_ending_here
+  return max_so_far
+
+
+--------- or -----------------------
+
+def maxSum(arr, n):
+  res = arr[0]
+  maxEnding = arr[0]
+  for i in range(1, n):
+    maxEnding = max(maxEnding + arr[i], arr[i])
+    res = max(res, maxEnding)
+  return res
+
+# maxEnding will store the maximum sum of the subarray ending at the current index
+# res will store the maximum sum of the subarray
+
+
+
+------------------- or -------------------
+
+def maxSum(arr, n, k):
+  if n < k:
+    return -1
+  res = 0
+  for i in range(k):
+    res += arr[i]
+
+  curr_sum = res
+  for i in range(k, n):
+    curr_sum += arr[i] - arr[i-k]
+    res = max(res, curr_sum)
+  return res
+
+# arr = [1, 8, 30, 1, 20, 4]
+# n= 3
+# res = (1 + 8 + 30) = 39 for k = 3
+# curr_sum = 39
+# i = 3, curr_sum = 39 + 1 - 1 = 39, res = max(39, 39) = 39
+# i = 4, curr_sum = 39 + 20 - 8 = 51, res = max(39, 51) = 51
+# i = 5, curr_sum = 51 + 4 - 30 = 25, res = max(51, 25) = 51
+# return res -> 51
+
+
+
+
+
+
+# problem
+
+# longest even odd subarray
+
+# naive approach
+
+def maxEvenOdd(arr, n):
+  res = 1
+  for i in range(n):
+    curr = 1
+    for j in range(i+1, n):
+      if (arr[j] % 2 == 0 and arr[j-1] % 2 != 0) or (arr[j] % 2 != 0 and arr[j-1] % 2 == 0):
+        curr += 1
+      else:
+        break
+    res = max(res, curr)
+  return res
+
+
+# Efficient approach
+
+def maxEvenOdd(arr, n):
+  res = 1
+  curr = 1
+  for i in range(1, n):
+    if (arr[i] % 2 == 0 and arr[i-1] % 2 != 0) or (arr[i] % 2 != 0 and arr[i-1] % 2 == 0):
+      curr += 1
+      res = max(res, curr)
+    else:
+      curr = 1
+  return res
+
+

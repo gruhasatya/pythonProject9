@@ -96,3 +96,26 @@ from typing import List
 #                     dp[i][j] = dp[i-1][j]
 #         return dp[n][m]
 
+# A has purchased n apples for B and C .Now he wants to distribute these apples with his friends.
+# one Apple typically weighs between 100 to 200 grams. A wants to distribute the apples in such a way that
+# the weight of the apples given to B is equal to the weight of the apples given to C.
+# A however is not allowed to cut any apple into pieces. Find the number of ways in which A can distribute the apples.
+
+# Example 1:
+
+
+# Input: 3 100 200 100
+# Output: Yes
+# Explanation: A can distribute the apples
+# in the following ways:
+# 1. 100 100 200
+# 2. 100 200 100
+# 3. 200 100 100
+# All the above ways satisfy the condition
+
+def sol(n, A):
+    if sum(A) % 2 != 0:
+        return "No"
+    else:
+        return "Yes"
+
